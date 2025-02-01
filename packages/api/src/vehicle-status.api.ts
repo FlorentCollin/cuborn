@@ -55,11 +55,11 @@ vehicleStatus.get(
 		},
 	}),
 	async (c) => {
-		const row = await db
+		const rows = await db
 			.select()
 			.from(vehicleStatusTable)
 			.orderBy(desc(vehicleStatusTable.id))
 			.limit(1);
-		return c.json(row);
+		return c.json(rows[0]);
 	},
 );

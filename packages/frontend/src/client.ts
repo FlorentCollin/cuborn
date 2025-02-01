@@ -7,3 +7,6 @@ export const fetchClient = createFetchClient<paths>({
 });
 
 export const $api = createClient(fetchClient);
+
+export type VehicleStatusLastResponse =
+	paths["/vehicle-status/last"]["get"]["responses"]["200"]["content"]["text/json"];

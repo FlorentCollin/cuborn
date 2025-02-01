@@ -4,7 +4,7 @@
 		"clientKind": "git"
 	},
 	"files": {
-		"ignore": ["**/*.gen.ts"]
+		"ignore": ["**/*.gen.ts", "packages/frontend/src/components/ui/**/*.tsx"]
 	},
 	"linter": {
 		"enabled": true,
