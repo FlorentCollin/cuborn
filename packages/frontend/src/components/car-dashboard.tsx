@@ -142,7 +142,7 @@ export default function CarDashboard() {
 						<CardTitle>Odometer History</CardTitle>
 					</CardHeader>
 					<CardContent className="pt-2">
-						<OdometerChart />
+						<OdometerChart data={allCarData} />
 					</CardContent>
 				</Card>
 			</div>
