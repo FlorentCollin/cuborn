@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS vehicle_status (
     window_rear_left TEXT NOT NULL,
     window_rear_right TEXT NOT NULL,
     connection_status TEXT NOT NULL,
-    odometer_km INTEGER NOT NULL,
+    odometer_km INTEGER NOT NULL
 ) STRICT
 """
 
