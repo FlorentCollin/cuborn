@@ -16,7 +16,7 @@ const data = [
 	{ date: "2025-02-01", odometerKm: 42119 },
 ];
 
-export default function OdometerChart() {
+export function OdometerChart() {
 	return (
 		<ChartContainer
 			config={{

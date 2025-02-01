@@ -63,3 +63,25 @@ vehicleStatus.get(
 		return c.json(rows[0]);
 	},
 );
+
+vehicleStatus.get(
+	"/",
+	describeRoute({
+		description: "Get all vehicle status",
+		responses: {
+			200: {
+				description: "OK",
+				content: {
+					"text/json": { schema: resolver(responseSchema.array()) },
+				},
+			},
+		},
+	}),
+	async (c) => {
+		const rows = await db
+			.select()
+			.from(vehicleStatusTable)
+			.orderBy(vehicleStatusTable.id);
+		return c.json(rows);
+	},
+);

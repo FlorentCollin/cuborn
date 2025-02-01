@@ -1,3 +1,4 @@
+import type { VehicleStatusResponse } from "@/client";
 import {
 	ChartContainer,
 	ChartTooltip,
@@ -5,18 +6,7 @@ import {
 } from "@/components/ui/chart";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
-const data = [
-	{ date: "2025-01-25", batteryLevel: 80 },
-	{ date: "2025-01-26", batteryLevel: 72 },
-	{ date: "2025-01-27", batteryLevel: 65 },
-	{ date: "2025-01-28", batteryLevel: 59 },
-	{ date: "2025-01-29", batteryLevel: 52 },
-	{ date: "2025-01-30", batteryLevel: 45 },
-	{ date: "2025-01-31", batteryLevel: 39 },
-	{ date: "2025-02-01", batteryLevel: 57 },
-];
-
-export default function BatteryChart() {
+export function BatteryChart({ data }: { data: VehicleStatusResponse }) {
 	return (
 		<ChartContainer
 			config={{
@@ -38,13 +28,14 @@ export default function BatteryChart() {
 			>
 				<CartesianGrid vertical={false} />
 				<XAxis
-					dataKey="date"
+					dataKey="timestamp"
 					tickLine={false}
 					axisLine={false}
-					tickFormatter={(value) => value.split("-").slice(1).join("/")}
+					// tickFormatter={(value) => value.split("-").slice(1).join("/")}
 					tickMargin={10}
 				/>
 				<YAxis
+					dataKey="batteryLevel"
 					tickLine={false}
 					axisLine={false}
 					tickFormatter={(value) => `${value}%`}

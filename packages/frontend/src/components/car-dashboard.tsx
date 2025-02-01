@@ -1,13 +1,11 @@
-"use client";
-
 import { $api } from "@/client";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Battery, Gauge, Power, ThermometerSun } from "lucide-react";
-import BatteryChart from "./battery-chart";
-import OdometerChart from "./odometer-chart";
-import VehicleStatus from "./vehicle-status";
+import { BatteryChart } from "./battery-chart";
+import { OdometerChart } from "./odometer-chart";
+import { VehicleStatus } from "./vehicle-status";
 
 export default function CarDashboard() {
 	const { data: carData, isLoading } = $api.useQuery(
@@ -15,10 +13,15 @@ export default function CarDashboard() {
 		"/vehicle-status/last",
 	);
 
-	if (isLoading) {
+	const { data: allCarData, isLoading: isLoadingAllCarData } = $api.useQuery(
+		"get",
+		"/vehicle-status",
+	);
+
+	if (isLoading || isLoadingAllCarData) {
 		return <div>Loading...</div>;
 	}
-	if (!carData) {
+	if (!carData || !allCarData) {
 		return <div>could not fetch data</div>;
 	}
 
@@ -131,7 +134,7 @@ export default function CarDashboard() {
 						<CardTitle>Battery Level History</CardTitle>
 					</CardHeader>
 					<CardContent className="pt-2">
-						<BatteryChart />
+						<BatteryChart data={allCarData} />
 					</CardContent>
 				</Card>
 				<Card>
