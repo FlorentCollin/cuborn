@@ -10,6 +10,8 @@ import sqlite3
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Optional
+from datetime import datetime
+import json
 
 from ulid import ULID
 from weconnect_cupra import weconnect_cupra
@@ -196,9 +198,9 @@ def insert_vehicle_status(conn: sqlite3.Connection, status: Dict[str, Any]) -> N
         raise
 
 def main():
-    # Initialize database
     db_path = os.path.expanduser("~/.local/share/cupra/vehicle_status.db")
     conn = init_database(db_path)
+    print(f"#  Cron start at {datetime.now()}")
 
     print('#  Initialize WeConnect')
     username = os.environ.get('WECONNECT_USERNAME')
@@ -222,7 +224,7 @@ def main():
             return
 
         vehicle_status = prepare_vehicle_status(vehicles[0].asDict())
-        print(vehicle_status)
+        print(json.dumps(vehicle_status))
         insert_vehicle_status(conn, vehicle_status)
             
         print('#  done')
@@ -231,6 +233,7 @@ def main():
         raise
     finally:
         conn.close()
+        print(f"#  Cron end at {datetime.now()}")
 
 if __name__ == '__main__':
     main()
