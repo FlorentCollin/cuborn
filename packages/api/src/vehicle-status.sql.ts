@@ -1,0 +1,33 @@
+import { sql } from "drizzle-orm";
+import { integer, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
+
+export const vehicleStatusTable = sqliteTable("vehicle_status", {
+	id: text("id").primaryKey(),
+	timestamp: text("timestamp").default(sql`datetime('now')`),
+	nickname: text("nickname"),
+	batteryLevel: integer("battery_level"),
+	rangeKm: integer("range_km"),
+	chargingStatus: text("charging_status"),
+	chargingPowerKw: real("charging_power_kw"),
+	chargingRateKmph: real("charging_rate_kmph"),
+	plugStatus: text("plug_status"),
+	targetSoc: real("target_soc"),
+	remainingChargingTime: integer("remaining_charging_time"),
+	climateStatus: text("climate_status"),
+	targetTempCelsius: real("target_temp_celsius"),
+	windowHeatingFront: text("window_heating_front"),
+	windowHeatingRear: text("window_heating_rear"),
+	doorsLocked: integer("doors_locked"),
+	doorsFrontLeft: text("doors_front_left"),
+	doorsFrontRight: text("doors_front_right"),
+	doorsRearLeft: text("doors_rear_left"),
+	doorsRearRight: text("doors_rear_right"),
+	doorsTrunk: text("doors_trunk"),
+	doorsHood: text("doors_hood"),
+	windowFrontLeft: text("window_front_left"),
+	windowFrontRight: text("window_front_right"),
+	windowRearLeft: text("window_rear_left"),
+	windowRearRight: text("window_rear_right"),
+	connectionStatus: text("connection_status"),
+	odometerKm: integer("odometer_km"),
+});

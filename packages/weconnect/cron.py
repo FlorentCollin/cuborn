@@ -198,7 +198,7 @@ def insert_vehicle_status(conn: sqlite3.Connection, status: Dict[str, Any]) -> N
         raise
 
 def main():
-    db_path = os.path.expanduser("~/.local/share/cupra/vehicle_status.db")
+    db_path = os.path.expanduser(os.environ.get('DATABASE_FILE_PATH'))
     conn = init_database(db_path)
     print(f"#  Cron start at {datetime.now()}")
 

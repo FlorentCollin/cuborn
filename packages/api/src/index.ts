@@ -1,11 +1,14 @@
 import { apiReference } from "@scalar/hono-api-reference";
 import { Hono } from "hono";
 import { openAPISpecs } from "hono-openapi";
+import { db } from "./db";
+import { vehicleStatusTable } from "./vehicle-status.sql";
 
 const app = new Hono();
 
-app.get("/", (c) => {
-	return c.text("Hello Hono!");
+app.get("/", async (c) => {
+	const rows = await db.select().from(vehicleStatusTable);
+	return c.json(rows);
 });
 
 app.get(

@@ -6,6 +6,7 @@
 	"dependencies": {
 		"@hono/zod-validator": "^0.4.2",
 		"@scalar/hono-api-reference": "^0.5.170",
+		"drizzle-orm": "^0.39.1",
 		"hono": "^4.6.20",
 		"hono-openapi": "^0.4.4",
 		"zod": "^3.24.1",
