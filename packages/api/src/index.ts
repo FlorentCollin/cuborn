@@ -1,12 +1,15 @@
 import { apiReference } from "@scalar/hono-api-reference";
 import { Hono } from "hono";
 import { openAPISpecs } from "hono-openapi";
+import { serveStatic } from "hono/bun";
 import { logger } from "hono/logger";
 import { vehicleStatus } from "./vehicle-status.api";
-
 const apiv1 = new Hono().route("/vehicle-status", vehicleStatus);
 
-const app = new Hono().use(logger()).route("/api/v1", apiv1);
+const app = new Hono()
+	.use(logger())
+	.route("/api/v1", apiv1)
+	.get("*", serveStatic({ root: "../frontend/dist" }));
 
 app.get(
 	"/openapi",
