@@ -3,7 +3,10 @@ import createClient from "openapi-react-query";
 import type { paths } from "../../api/src/api-schema";
 
 export const fetchClient = createFetchClient<paths>({
-	baseUrl: "http://localhost:3000/api/v1",
+	baseUrl:
+		import.meta.env.MODE === "production"
+			? "http://apollo.taila4c2d3.ts.net:3000/api/v1"
+			: "http://localhost:3000/api/v1",
 });
 
 export const $api = createClient(fetchClient);
