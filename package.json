@@ -1,14 +1,17 @@
 {
-  "name": "cuborn",
-  "module": "index.ts",
-  "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  }
+	"name": "cuborn",
+	"module": "index.ts",
+	"type": "module",
+	"scripts": {
+		"format": "biome format --write .",
+		"check": "biome check --write .",
+		"ci": "biome ci ."
+	},
+	"workspaces": ["packages/*"],
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	}
 }

@@ -1,0 +1,17 @@
+{
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git"
+	},
+	"files": {
+		"ignore": ["**/*.gen.ts"]
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"style": {
+				"noNonNullAssertion": "off"
+			}
+		}
+	}
+}
