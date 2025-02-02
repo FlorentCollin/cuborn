@@ -1,12 +1,14 @@
-import type { VehicleStatusResponse } from "@/client";
+import type { VehicleStatusBatteryLevelResponse } from "@/client";
 import {
 	ChartContainer,
 	ChartTooltip,
 	ChartTooltipContent,
 } from "@/components/ui/chart";
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-export function BatteryChart({ data }: { data: VehicleStatusResponse }) {
+export function BatteryChart({
+	data,
+}: { data: VehicleStatusBatteryLevelResponse }) {
 	return (
 		<ChartContainer
 			config={{
@@ -17,7 +19,7 @@ export function BatteryChart({ data }: { data: VehicleStatusResponse }) {
 			}}
 			className=""
 		>
-			<LineChart
+			<AreaChart
 				data={data}
 				margin={{
 					top: 5,
@@ -28,14 +30,14 @@ export function BatteryChart({ data }: { data: VehicleStatusResponse }) {
 			>
 				<CartesianGrid vertical={false} />
 				<XAxis
-					dataKey="timestamp"
+					dataKey="time"
 					tickLine={false}
 					axisLine={false}
 					// tickFormatter={(value) => value.split("-").slice(1).join("/")}
 					tickMargin={10}
 				/>
 				<YAxis
-					dataKey="batteryLevel"
+					dataKey="min_battery_level_percentage"
 					tickLine={false}
 					axisLine={false}
 					tickFormatter={(value) => `${value}%`}
@@ -44,14 +46,14 @@ export function BatteryChart({ data }: { data: VehicleStatusResponse }) {
 					max={100}
 				/>
 				<ChartTooltip content={<ChartTooltipContent />} />
-				<Line
+				<Area
 					type="monotone"
-					dataKey="batteryLevel"
+					dataKey="min_battery_level_percentage"
+					dot={true}
 					strokeWidth={2}
-					dot={{ strokeWidth: 2, r: 4 }}
-					activeDot={{ r: 6 }}
+					connectNulls={true}
 				/>
-			</LineChart>
+			</AreaChart>
 		</ChartContainer>
 	);
 }

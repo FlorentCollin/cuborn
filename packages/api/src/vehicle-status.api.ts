@@ -1,45 +1,10 @@
-import { desc } from "drizzle-orm";
 import { Hono } from "hono";
 import { describeRoute } from "hono-openapi";
 import { resolver } from "hono-openapi/zod";
-import { db } from "./db";
-import {
-	VehicleStatusTableSelect,
-	vehicleStatusTable,
-} from "./vehicle-status.sql";
+import { z } from "zod";
+import { VehicleStatus, connection } from "./db";
 
 export const vehicleStatus = new Hono();
-
-const responseSchema = VehicleStatusTableSelect.pick({
-	id: true,
-	timestamp: true,
-	nickname: true,
-	batteryLevel: true,
-	rangeKm: true,
-	chargingStatus: true,
-	chargingPowerKw: true,
-	chargingRateKmph: true,
-	plugStatus: true,
-	targetSoc: true,
-	remainingChargingTime: true,
-	climateStatus: true,
-	targetTempCelsius: true,
-	windowHeatingFront: true,
-	windowHeatingRear: true,
-	doorsLocked: true,
-	doorsFrontLeft: true,
-	doorsFrontRight: true,
-	doorsRearLeft: true,
-	doorsRearRight: true,
-	doorsTrunk: true,
-	doorsHood: true,
-	windowFrontLeft: true,
-	windowFrontRight: true,
-	windowRearLeft: true,
-	windowRearRight: true,
-	connectionStatus: true,
-	odometerKm: true,
-});
 
 vehicleStatus.get(
 	"/last",
@@ -49,39 +14,61 @@ vehicleStatus.get(
 			200: {
 				description: "OK",
 				content: {
-					"text/json": { schema: resolver(responseSchema) },
+					"application/json": { schema: resolver(VehicleStatus) },
 				},
 			},
 		},
 	}),
 	async (c) => {
-		const rows = await db
-			.select()
-			.from(vehicleStatusTable)
-			.orderBy(desc(vehicleStatusTable.id))
-			.limit(1);
+		const reader = await connection.runAndReadAll(
+			"SELECT * FROM vehicle_status ORDER BY id DESC LIMIT 1",
+		);
+		const rows = reader.getRowObjectsJson();
 		return c.json(rows[0]);
 	},
 );
 
+const BatteryLevelResponse = z.object({
+	min_battery_level_percentage: z.string().nullable(),
+	time: z.string(),
+});
+type BatteryLevelResponse = z.infer<typeof BatteryLevelResponse>;
+
 vehicleStatus.get(
-	"/",
+	"/battery-level",
 	describeRoute({
-		description: "Get all vehicle status",
+		description: "Get the battery level history",
 		responses: {
 			200: {
 				description: "OK",
 				content: {
-					"text/json": { schema: resolver(responseSchema.array()) },
+					"application/json": {
+						schema: resolver(BatteryLevelResponse.array()),
+					},
 				},
 			},
 		},
 	}),
 	async (c) => {
-		const rows = await db
-			.select()
-			.from(vehicleStatusTable)
-			.orderBy(vehicleStatusTable.id);
-		return c.json(rows);
+		const reader = await connection.runAndReadAll(`
+		with hourly_series as (
+			select unnest(generate_series(
+				date_trunc('hour', now() - interval '1 days'),
+				date_trunc('hour', now()),
+				interval '1 hour'
+			)) as hour
+		)
+		select 
+			hourly_series.hour as time,
+			coalesce(min(status.battery_level), null) as min_battery_level_percentage
+		from hourly_series
+		left join vehicle_status status on 
+			time_bucket('1h', status.created_at::timestamptz) = hourly_series.hour
+		group by hourly_series.hour
+		order by hourly_series.hour;`);
+
+		return c.json(
+			BatteryLevelResponse.array().parse(reader.getRowObjectsJson()),
+		);
 	},
 );

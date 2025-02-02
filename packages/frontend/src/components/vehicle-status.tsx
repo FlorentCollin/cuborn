@@ -27,14 +27,14 @@ export function VehicleStatus({
 			{/* Lock Status */}
 			<div className="flex gap-2 py-2">
 				<div className="flex items-center gap-2">
-					{carData.doorsLocked ? (
+					{carData.doors_locked ? (
 						<Lock className="h-4 w-4" />
 					) : (
 						<LockOpen className="h-4 w-4" />
 					)}
 					<h3 className="font-medium">
 						{" "}
-						{carData.doorsLocked ? "Vehicle Locked" : "Vehicle Unlocked"}{" "}
+						{carData.doors_locked ? "Vehicle Locked" : "Vehicle Unlocked"}{" "}
 					</h3>
 				</div>
 			</div>
@@ -53,33 +53,33 @@ export function VehicleStatus({
 									<span className="text-sm text-muted-foreground">
 										Front Left
 									</span>
-									{getDoorStatus(carData.doorsFrontLeft)}
+									{getDoorStatus(carData.doors_front_left)}
 								</div>
 								<div className="flex items-center justify-between">
 									<span className="text-sm text-muted-foreground">
 										Front Right
 									</span>
-									{getDoorStatus(carData.doorsFrontRight)}
+									{getDoorStatus(carData.doors_front_right)}
 								</div>
 								<div className="flex items-center justify-between">
 									<span className="text-sm text-muted-foreground">
 										Rear Left
 									</span>
-									{getDoorStatus(carData.doorsRearLeft)}
+									{getDoorStatus(carData.doors_rear_left)}
 								</div>
 								<div className="flex items-center justify-between">
 									<span className="text-sm text-muted-foreground">
 										Rear Right
 									</span>
-									{getDoorStatus(carData.doorsRearRight)}
+									{getDoorStatus(carData.doors_rear_right)}
 								</div>
 								<div className="flex items-center justify-between">
 									<span className="text-sm text-muted-foreground">Trunk</span>
-									{getDoorStatus(carData.doorsTrunk)}
+									{getDoorStatus(carData.doors_trunk)}
 								</div>
 								<div className="flex items-center justify-between">
 									<span className="text-sm text-muted-foreground">Hood</span>
-									{getDoorStatus(carData.doorsHood)}
+									{getDoorStatus(carData.doors_hood)}
 								</div>
 							</div>
 						</div>
@@ -99,25 +99,25 @@ export function VehicleStatus({
 									<span className="text-sm text-muted-foreground">
 										Front Left
 									</span>
-									{getWindowStatus(carData.windowFrontLeft)}
+									{getWindowStatus(carData.window_front_left)}
 								</div>
 								<div className="flex items-center justify-between">
 									<span className="text-sm text-muted-foreground">
 										Front Right
 									</span>
-									{getWindowStatus(carData.windowFrontRight)}
+									{getWindowStatus(carData.window_front_right)}
 								</div>
 								<div className="flex items-center justify-between">
 									<span className="text-sm text-muted-foreground">
 										Rear Left
 									</span>
-									{getWindowStatus(carData.windowRearLeft)}
+									{getWindowStatus(carData.window_rear_left)}
 								</div>
 								<div className="flex items-center justify-between">
 									<span className="text-sm text-muted-foreground">
 										Rear Right
 									</span>
-									{getWindowStatus(carData.windowRearRight)}
+									{getWindowStatus(carData.window_rear_right)}
 								</div>
 							</div>
 						</div>
@@ -137,24 +137,24 @@ export function VehicleStatus({
 									<span className="text-sm text-muted-foreground">Front</span>
 									<Badge
 										variant={
-											carData.windowHeatingFront === "OFF"
+											carData.window_heating_front === "OFF"
 												? "outline"
 												: "default"
 										}
 									>
-										{carData.windowHeatingFront}
+										{carData.window_heating_front}
 									</Badge>
 								</div>
 								<div className="flex items-center justify-between">
 									<span className="text-sm text-muted-foreground">Rear</span>
 									<Badge
 										variant={
-											carData.windowHeatingRear === "OFF"
+											carData.window_heating_rear === "OFF"
 												? "outline"
 												: "default"
 										}
 									>
-										{carData.windowHeatingRear}
+										{carData.window_heating_rear}
 									</Badge>
 								</div>
 							</div>

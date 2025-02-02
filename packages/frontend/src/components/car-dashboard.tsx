@@ -13,15 +13,13 @@ export default function CarDashboard() {
 		"/vehicle-status/last",
 	);
 
-	const { data: allCarData, isLoading: isLoadingAllCarData } = $api.useQuery(
-		"get",
-		"/vehicle-status",
-	);
+	const { data: batteryLevelData, isLoading: isLoadingBatteryLevel } =
+		$api.useQuery("get", "/vehicle-status/battery-level");
 
-	if (isLoading || isLoadingAllCarData) {
+	if (isLoading || isLoadingBatteryLevel) {
 		return <div>Loading...</div>;
 	}
-	if (!carData || !allCarData) {
+	if (!carData || !batteryLevelData) {
 		return <div>could not fetch data</div>;
 	}
 
@@ -31,10 +29,10 @@ export default function CarDashboard() {
 				<h1 className="text-xl">CUPRA Born Dashboard</h1>
 				<Badge
 					variant={
-						carData.connectionStatus === "ONLINE" ? "default" : "secondary"
+						carData.connection_status === "ONLINE" ? "default" : "secondary"
 					}
 				>
-					{carData.connectionStatus}
+					{carData.connection_status}
 				</Badge>
 			</div>
 
@@ -46,10 +44,10 @@ export default function CarDashboard() {
 						<Battery className="h-4 w-4 text-muted-foreground" />
 					</CardHeader>
 					<CardContent>
-						<div className="text-2xl font-bold">{carData.batteryLevel}%</div>
-						<Progress value={carData.batteryLevel} className="mt-2" />
+						<div className="text-2xl font-bold">{carData.battery_level}%</div>
+						<Progress value={carData.battery_level} className="mt-2" />
 						<p className="mt-2 text-xs text-muted-foreground">
-							Target: {carData.targetSoc}%
+							Target: {carData.target_soc}%
 						</p>
 					</CardContent>
 				</Card>
@@ -61,7 +59,7 @@ export default function CarDashboard() {
 						<Gauge className="h-4 w-4 text-muted-foreground" />
 					</CardHeader>
 					<CardContent>
-						<div className="text-2xl font-bold">{carData.rangeKm} km</div>
+						<div className="text-2xl font-bold">{carData.range_km} km</div>
 						<p className="text-xs text-muted-foreground">
 							Estimated remaining range
 						</p>
@@ -79,16 +77,18 @@ export default function CarDashboard() {
 							<div className="flex items-center justify-between">
 								<span className="text-sm">Status</span>
 								<Badge variant="outline">
-									{carData.chargingStatus.replace(/_/g, " ")}
+									{carData.charging_status
+										.replace(/_/g, " ")
+										.replace("FOR CHARGING", "")}
 								</Badge>
 							</div>
 							<div className="flex items-center justify-between">
 								<span className="text-sm">Power</span>
-								<span>{carData.chargingPowerKw} kW</span>
+								<span>{carData.charging_power_kw} kW</span>
 							</div>
 							<div className="flex items-center justify-between">
 								<span className="text-sm">Rate</span>
-								<span>{carData.chargingRateKmph} km/h</span>
+								<span>{carData.charging_rate_kmph} km/h</span>
 							</div>
 						</div>
 					</CardContent>
@@ -106,11 +106,11 @@ export default function CarDashboard() {
 						<div className="space-y-2">
 							<div className="flex items-center justify-between">
 								<span className="text-sm">Status</span>
-								<Badge variant="outline">{carData.climateStatus}</Badge>
+								<Badge variant="outline">{carData.climate_status}</Badge>
 							</div>
 							<div className="flex items-center justify-between">
 								<span className="text-sm">Target Temperature</span>
-								<span>{carData.targetTempCelsius}°C</span>
+								<span>{carData.target_temp_celsius}°C</span>
 							</div>
 						</div>
 					</CardContent>
@@ -134,18 +134,17 @@ export default function CarDashboard() {
 						<CardTitle>Battery Level History</CardTitle>
 					</CardHeader>
 					<CardContent className="pt-2">
-						<BatteryChart data={allCarData} />
+						<BatteryChart data={batteryLevelData} />
 					</CardContent>
 				</Card>
 				<Card>
 					<CardHeader>
 						<CardTitle>Odometer History</CardTitle>
 					</CardHeader>
-					<CardContent className="pt-2">
-						<OdometerChart data={allCarData} />
-					</CardContent>
+					<CardContent className="pt-2"></CardContent>
 				</Card>
 			</div>
 		</div>
 	);
 }
+//<OdometerChart data={allCarData} />

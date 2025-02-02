@@ -28,14 +28,14 @@ export function OdometerChart({ data }: { data: VehicleStatusResponse }) {
 			>
 				<CartesianGrid vertical={false} />
 				<XAxis
-					dataKey="date"
+					dataKey="created_at"
 					tickLine={false}
 					axisLine={false}
 					// tickFormatter={(value) => value.split("-").slice(1).join("/")}
 					tickMargin={10}
 				/>
 				<YAxis
-					dataKey="odometerKm"
+					dataKey="odometer_km"
 					tickLine={false}
 					axisLine={false}
 					tickFormatter={(value) => `${value} km`}
@@ -44,10 +44,9 @@ export function OdometerChart({ data }: { data: VehicleStatusResponse }) {
 				<ChartTooltip content={<ChartTooltipContent />} />
 				<Line
 					type="monotone"
-					dataKey="odometerKm"
+					dataKey="odometer_km"
 					strokeWidth={2}
-					dot={{ strokeWidth: 2, r: 4 }}
-					activeDot={{ r: 6 }}
+					dot={{ strokeWidth: 0, r: 0 }}
 				/>
 			</LineChart>
 		</ChartContainer>

@@ -10,7 +10,7 @@ import sqlite3
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 
 from ulid import ULID
@@ -110,7 +110,6 @@ def prepare_vehicle_status(data: Dict[str, Any]) -> Dict[str, Any]:
 CREATE_TABLE_SQL = """
 CREATE TABLE IF NOT EXISTS vehicle_status (
     id TEXT PRIMARY KEY,
-    timestamp TEXT DEFAULT (datetime('now')) NOT NULL,
     nickname TEXT NOT NULL,
     battery_level INTEGER NOT NULL,
     range_km INTEGER NOT NULL,
@@ -136,7 +135,8 @@ CREATE TABLE IF NOT EXISTS vehicle_status (
     window_rear_left TEXT NOT NULL,
     window_rear_right TEXT NOT NULL,
     connection_status TEXT NOT NULL,
-    odometer_km INTEGER NOT NULL
+    odometer_km INTEGER NOT NULL,
+    created_at TEXT NOT NULL
 ) STRICT
 """
 
@@ -148,7 +148,7 @@ INSERT INTO vehicle_status (
     doors_locked, doors_front_left, doors_front_right, doors_rear_left,
     doors_rear_right, doors_trunk, doors_hood, window_front_left,
     window_front_right, window_rear_left, window_rear_right,
-    connection_status, odometer_km
+    connection_status, odometer_km, created_at
 ) VALUES (
     :id, :nickname, :battery_level, :range_km, :charging_status, :charging_power_kw,
     :charging_rate_kmph, :plug_status, :target_soc, :remaining_charging_time,
@@ -156,7 +156,7 @@ INSERT INTO vehicle_status (
     :doors_locked, :doors_front_left, :doors_front_right, :doors_rear_left,
     :doors_rear_right, :doors_trunk, :doors_hood, :window_front_left,
     :window_front_right, :window_rear_left, :window_rear_right,
-    :connection_status, :odometer_km
+    :connection_status, :odometer_km, :created_at
 )
 """
 
@@ -189,6 +189,7 @@ def init_database(db_path: str) -> sqlite3.Connection:
 def insert_vehicle_status(conn: sqlite3.Connection, status: Dict[str, Any]) -> None:
     """Insert vehicle status into database."""
     status['id'] = str(ULID())
+    status['created_at'] = datetime.now(timezone.utc).isoformat()
     
     try:
         with conn:  # This creates a transaction
