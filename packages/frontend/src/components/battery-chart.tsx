@@ -42,8 +42,7 @@ export function BatteryChart({
 					axisLine={false}
 					tickFormatter={(value) => `${value}%`}
 					tickMargin={10}
-					min={0}
-					max={100}
+					domain={[0, 100]}
 				/>
 				<ChartTooltip content={<ChartTooltipContent />} />
 				<Area
