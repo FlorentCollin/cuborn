@@ -33,7 +33,7 @@ export function BatteryChart({
 					dataKey="time"
 					tickLine={false}
 					axisLine={false}
-					// tickFormatter={(value) => value.split("-").slice(1).join("/")}
+					tickFormatter={(value) => new Date(value).toLocaleString()}
 					tickMargin={10}
 				/>
 				<YAxis

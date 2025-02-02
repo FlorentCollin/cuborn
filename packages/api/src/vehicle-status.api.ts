@@ -53,7 +53,7 @@ vehicleStatus.get(
 		const reader = await connection.runAndReadAll(`
 		with hourly_series as (
 			select unnest(generate_series(
-				date_trunc('hour', now() - interval '1 days'),
+				date_trunc('hour', now() - interval '1 days' - interval '3 hours'),
 				date_trunc('hour', now()),
 				interval '1 hour'
 			)) as hour

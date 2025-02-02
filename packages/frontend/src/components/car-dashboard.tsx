@@ -2,14 +2,7 @@ import { $api } from "@/client";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import {
-	Battery,
-	Gauge,
-	Lock,
-	LockOpen,
-	Power,
-	ThermometerSun,
-} from "lucide-react";
+import { Battery, Gauge, ThermometerSun, Zap } from "lucide-react";
 import { BatteryChart } from "./battery-chart";
 import { VehicleStatus } from "./vehicle-status";
 
@@ -29,6 +22,8 @@ export default function CarDashboard() {
 		return <div>could not fetch data</div>;
 	}
 
+	const isCarCharging = carData.charging_status === "CHARGING";
+	const textColor = isCarCharging ? "text-green-500" : "";
 	return (
 		<div className="space-y-4">
 			<div className="flex items-center justify-between">
@@ -47,10 +42,12 @@ export default function CarDashboard() {
 				<Card>
 					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 						<CardTitle className="text-sm font-medium">Battery Level</CardTitle>
-						<Battery className="h-4 w-4 text-muted-foreground" />
+						<Battery className={`h-4 w-4 text-muted-foreground ${textColor}`} />
 					</CardHeader>
 					<CardContent>
-						<div className="text-2xl font-bold">{carData.battery_level}%</div>
+						<div className={`text-2xl font-bold ${textColor}`}>
+							{carData.battery_level}%
+						</div>
 						<Progress value={carData.battery_level} className="mt-2" />
 						<p className="mt-2 text-xs text-muted-foreground">
 							Target: {carData.target_soc}%
@@ -76,13 +73,15 @@ export default function CarDashboard() {
 				<Card>
 					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 						<CardTitle className="text-sm font-medium">Charging</CardTitle>
-						<Power className="h-4 w-4 text-muted-foreground" />
+						<Zap
+							className={`h-4 w-4 text-muted-foreground ${isCarCharging ? "animate-pulse text-green-500" : ""}`}
+						/>
 					</CardHeader>
 					<CardContent>
 						<div className="space-y-2">
 							<div className="flex items-center justify-between">
 								<span className="text-sm text-muted-foreground">Status</span>
-								<Badge variant="outline">
+								<Badge variant={isCarCharging ? "default" : "outline"}>
 									{carData.charging_status
 										.replace(/_/g, " ")
 										.replace("FOR CHARGING", "")}
@@ -130,18 +129,13 @@ export default function CarDashboard() {
 
 			{/* Charts Section */}
 			<div className="grid gap-4 md:grid-cols-2">
-				<Card>
+				<Card className="col-span-2">
 					<CardHeader>
 						<CardTitle>Battery Level History</CardTitle>
 					</CardHeader>
 					<CardContent className="pt-2">
 						<BatteryChart data={batteryLevelData} />
 					</CardContent>
-				</Card>
-				<Card>
-					<CardHeader>
-						<CardTitle>TBD</CardTitle>
-					</CardHeader>
 				</Card>
 			</div>
 		</div>
