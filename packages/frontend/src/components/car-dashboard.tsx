@@ -2,9 +2,15 @@ import { $api } from "@/client";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Battery, Gauge, Power, ThermometerSun } from "lucide-react";
+import {
+	Battery,
+	Gauge,
+	Lock,
+	LockOpen,
+	Power,
+	ThermometerSun,
+} from "lucide-react";
 import { BatteryChart } from "./battery-chart";
-import { OdometerChart } from "./odometer-chart";
 import { VehicleStatus } from "./vehicle-status";
 
 export default function CarDashboard() {
@@ -75,7 +81,7 @@ export default function CarDashboard() {
 					<CardContent>
 						<div className="space-y-2">
 							<div className="flex items-center justify-between">
-								<span className="text-sm">Status</span>
+								<span className="text-sm text-muted-foreground">Status</span>
 								<Badge variant="outline">
 									{carData.charging_status
 										.replace(/_/g, " ")
@@ -83,11 +89,11 @@ export default function CarDashboard() {
 								</Badge>
 							</div>
 							<div className="flex items-center justify-between">
-								<span className="text-sm">Power</span>
+								<span className="text-sm text-muted-foreground">Power</span>
 								<span>{carData.charging_power_kw} kW</span>
 							</div>
 							<div className="flex items-center justify-between">
-								<span className="text-sm">Rate</span>
+								<span className="text-sm text-muted-foreground">Rate</span>
 								<span>{carData.charging_rate_kmph} km/h</span>
 							</div>
 						</div>
@@ -105,11 +111,13 @@ export default function CarDashboard() {
 					<CardContent>
 						<div className="space-y-2">
 							<div className="flex items-center justify-between">
-								<span className="text-sm">Status</span>
+								<span className="text-sm text-muted-foreground">Status</span>
 								<Badge variant="outline">{carData.climate_status}</Badge>
 							</div>
 							<div className="flex items-center justify-between">
-								<span className="text-sm">Target Temperature</span>
+								<span className="text-sm text-muted-foreground">
+									Target Temperature
+								</span>
 								<span>{carData.target_temp_celsius}°C</span>
 							</div>
 						</div>
@@ -118,14 +126,7 @@ export default function CarDashboard() {
 			</div>
 
 			{/* Vehicle Status Section */}
-			<Card>
-				<CardHeader>
-					<CardTitle className="text-lg">Vehicle Status</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<VehicleStatus carData={carData} />
-				</CardContent>
-			</Card>
+			<VehicleStatus carData={carData} />
 
 			{/* Charts Section */}
 			<div className="grid gap-4 md:grid-cols-2">
@@ -139,9 +140,8 @@ export default function CarDashboard() {
 				</Card>
 				<Card>
 					<CardHeader>
-						<CardTitle>Odometer History</CardTitle>
+						<CardTitle>TBD</CardTitle>
 					</CardHeader>
-					<CardContent className="pt-2"></CardContent>
 				</Card>
 			</div>
 		</div>

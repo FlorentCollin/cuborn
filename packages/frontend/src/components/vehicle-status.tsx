@@ -1,7 +1,7 @@
 import type { VehicleStatusLastResponse } from "@/client";
 import { Badge } from "@/components/ui/badge";
 import { Car, DoorClosed, Lock, LockOpen, Square } from "lucide-react";
-import { Card, CardContent } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 export function VehicleStatus({
 	carData,
@@ -23,142 +23,97 @@ export function VehicleStatus({
 	};
 
 	return (
-		<div className="">
-			{/* Lock Status */}
-			<div className="flex gap-2 py-2">
-				<div className="flex items-center gap-2">
-					{carData.doors_locked ? (
-						<Lock className="h-4 w-4" />
-					) : (
-						<LockOpen className="h-4 w-4" />
-					)}
-					<h3 className="font-medium">
-						{" "}
-						{carData.doors_locked ? "Vehicle Locked" : "Vehicle Unlocked"}{" "}
-					</h3>
-				</div>
-			</div>
-
+		<div>
 			{/* Doors Status */}
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-2">
 				<Card>
-					<CardContent className="pt-6">
-						<div className="space-y-4">
-							<div className="flex items-center gap-2">
-								<DoorClosed className="h-4 w-4" />
-								<h3 className="font-medium">Doors</h3>
-							</div>
-							<div className="grid gap-3">
-								<div className="flex items-center justify-between">
-									<span className="text-sm text-muted-foreground">
-										Front Left
-									</span>
-									{getDoorStatus(carData.doors_front_left)}
-								</div>
-								<div className="flex items-center justify-between">
-									<span className="text-sm text-muted-foreground">
-										Front Right
-									</span>
-									{getDoorStatus(carData.doors_front_right)}
-								</div>
-								<div className="flex items-center justify-between">
-									<span className="text-sm text-muted-foreground">
-										Rear Left
-									</span>
-									{getDoorStatus(carData.doors_rear_left)}
-								</div>
-								<div className="flex items-center justify-between">
-									<span className="text-sm text-muted-foreground">
-										Rear Right
-									</span>
-									{getDoorStatus(carData.doors_rear_right)}
-								</div>
-								<div className="flex items-center justify-between">
-									<span className="text-sm text-muted-foreground">Trunk</span>
-									{getDoorStatus(carData.doors_trunk)}
-								</div>
-								<div className="flex items-center justify-between">
-									<span className="text-sm text-muted-foreground">Hood</span>
-									{getDoorStatus(carData.doors_hood)}
-								</div>
-							</div>
-						</div>
+					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+						<CardTitle className="text-sm font-medium">Doors</CardTitle>
+						<DoorClosed className="h-4 w-4 text-muted-foreground" />
+					</CardHeader>
+					<CardContent className="grid grid-cols-2 gap-3 justify-items-end">
+						<span className="text-sm text-muted-foreground justify-self-start">
+							Front Left
+						</span>
+						{getDoorStatus(carData.doors_front_left)}
+						<span className="text-sm text-muted-foreground justify-self-start">
+							Front Right
+						</span>
+						{getDoorStatus(carData.doors_front_right)}
+						<span className="text-sm text-muted-foreground justify-self-start">
+							Rear Left
+						</span>
+						{getDoorStatus(carData.doors_rear_left)}
+						<span className="text-sm text-muted-foreground justify-self-start">
+							Rear Right
+						</span>
+						{getDoorStatus(carData.doors_rear_right)}
+						<span className="text-sm text-muted-foreground justify-self-start">
+							Trunk
+						</span>
+						{getDoorStatus(carData.doors_trunk)}
+						<span className="text-sm text-muted-foreground justify-self-start">
+							Hood
+						</span>
+						{getDoorStatus(carData.doors_hood)}
 					</CardContent>
 				</Card>
 
 				{/* Windows Status */}
 				<Card>
-					<CardContent className="pt-6">
-						<div className="space-y-4">
-							<div className="flex items-center gap-2">
-								<Square className="h-4 w-4" />
-								<h3 className="font-medium">Windows</h3>
-							</div>
-							<div className="grid gap-3">
-								<div className="flex items-center justify-between">
-									<span className="text-sm text-muted-foreground">
-										Front Left
-									</span>
-									{getWindowStatus(carData.window_front_left)}
-								</div>
-								<div className="flex items-center justify-between">
-									<span className="text-sm text-muted-foreground">
-										Front Right
-									</span>
-									{getWindowStatus(carData.window_front_right)}
-								</div>
-								<div className="flex items-center justify-between">
-									<span className="text-sm text-muted-foreground">
-										Rear Left
-									</span>
-									{getWindowStatus(carData.window_rear_left)}
-								</div>
-								<div className="flex items-center justify-between">
-									<span className="text-sm text-muted-foreground">
-										Rear Right
-									</span>
-									{getWindowStatus(carData.window_rear_right)}
-								</div>
-							</div>
-						</div>
+					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+						<CardTitle className="text-sm font-medium">Windows</CardTitle>
+						<Square className="h-4 w-4 text-muted-foreground" />
+					</CardHeader>
+					<CardContent className="grid grid-cols-2 gap-3 justify-items-end">
+						<span className="text-sm text-muted-foreground justify-self-start">
+							Front Left
+						</span>
+						{getWindowStatus(carData.window_front_left)}
+						<span className="text-sm text-muted-foreground justify-self-start">
+							Front Right
+						</span>
+						{getWindowStatus(carData.window_front_right)}
+						<span className="text-sm text-muted-foreground justify-self-start">
+							Rear Left
+						</span>
+						{getWindowStatus(carData.window_rear_left)}
+						<span className="text-sm text-muted-foreground justify-self-start">
+							Rear Right
+						</span>
+						{getWindowStatus(carData.window_rear_right)}
 					</CardContent>
 				</Card>
 
 				{/* Window Heating Status */}
 				<Card>
-					<CardContent className="pt-6">
-						<div className="space-y-4">
-							<div className="flex items-center gap-2">
-								<Car className="h-4 w-4" />
-								<h3 className="font-medium">Window Heating</h3>
-							</div>
-							<div className="grid gap-3">
-								<div className="flex items-center justify-between">
-									<span className="text-sm text-muted-foreground">Front</span>
-									<Badge
-										variant={
-											carData.window_heating_front === "OFF"
-												? "outline"
-												: "default"
-										}
-									>
-										{carData.window_heating_front}
-									</Badge>
-								</div>
-								<div className="flex items-center justify-between">
-									<span className="text-sm text-muted-foreground">Rear</span>
-									<Badge
-										variant={
-											carData.window_heating_rear === "OFF"
-												? "outline"
-												: "default"
-										}
-									>
-										{carData.window_heating_rear}
-									</Badge>
-								</div>
-							</div>
-						</div>
+					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+						<CardTitle className="text-sm font-medium">
+							Window Heating
+						</CardTitle>
+						<Car className="h-4 w-4 text-muted-foreground" />
+					</CardHeader>
+					<CardContent className="grid grid-cols-2 gap-3 justify-items-end">
+						<span className="text-sm text-muted-foreground justify-self-start">
+							Front
+						</span>
+						<Badge
+							variant={
+								carData.window_heating_front === "OFF" ? "outline" : "default"
+							}
+						>
+							{carData.window_heating_front}
+						</Badge>
+						<span className="text-sm text-muted-foreground justify-self-start">
+							Rear
+						</span>
+						<Badge
+							variant={
+								carData.window_heating_rear === "OFF" ? "outline" : "default"
+							}
+						>
+							{carData.window_heating_rear}
+						</Badge>
 					</CardContent>
 				</Card>
 			</div>
