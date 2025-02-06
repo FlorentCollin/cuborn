@@ -9,7 +9,15 @@ const apiv1 = new Hono().route("/vehicle-status", vehicleStatus);
 const app = new Hono()
 	.use(logger())
 	.route("/api/v1", apiv1)
-	.get("*", serveStatic({ root: "../frontend/dist" }));
+	.get(
+		"*",
+		serveStatic({
+			root: "../frontend/dist",
+			onFound: (_path, c) => {
+				c.header("Cache-Control", "public, immutable, max-age=31556952");
+			},
+		}),
+	);
 
 app.get(
 	"/openapi",
