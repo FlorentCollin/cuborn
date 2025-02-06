@@ -13,6 +13,7 @@ const app = new Hono()
 		"*",
 		serveStatic({
 			root: "../frontend/dist",
+			precompressed: true,
 			onFound: (_path, c) => {
 				c.header("Cache-Control", "public, immutable, max-age=31556952");
 			},
