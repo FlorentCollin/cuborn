@@ -22,7 +22,7 @@ export default function CarDashboard() {
 		return <div>could not fetch data</div>;
 	}
 
-	const isCarCharging = carData.charging_status === "CHARGING";
+	const isCarCharging = carData.chargingStatus === "CHARGING";
 	const textColor = isCarCharging ? "text-green-500" : "";
 	return (
 		<div className="space-y-4">
@@ -30,10 +30,10 @@ export default function CarDashboard() {
 				<h1 className="text-xl">CUPRA Born Dashboard</h1>
 				<Badge
 					variant={
-						carData.connection_status === "ONLINE" ? "default" : "secondary"
+						carData.connectionStatus === "ONLINE" ? "default" : "secondary"
 					}
 				>
-					{carData.connection_status}
+					{carData.connectionStatus}
 				</Badge>
 			</div>
 
@@ -46,11 +46,11 @@ export default function CarDashboard() {
 					</CardHeader>
 					<CardContent>
 						<div className={`text-2xl font-bold ${textColor}`}>
-							{carData.battery_level}%
+							{carData.batteryLevel}%
 						</div>
-						<Progress value={carData.battery_level} className="mt-2" />
+						<Progress value={carData.batteryLevel} className="mt-2" />
 						<p className="mt-2 text-xs text-muted-foreground">
-							Target: {carData.target_soc}%
+							Target: {carData.targetSoc}%
 						</p>
 					</CardContent>
 				</Card>
@@ -62,7 +62,7 @@ export default function CarDashboard() {
 						<Gauge className="h-4 w-4 text-muted-foreground" />
 					</CardHeader>
 					<CardContent>
-						<div className="text-2xl font-bold">{carData.range_km} km</div>
+						<div className="text-2xl font-bold">{carData.rangeKm} km</div>
 						<p className="text-xs text-muted-foreground">
 							Estimated remaining range
 						</p>
@@ -82,18 +82,18 @@ export default function CarDashboard() {
 							<div className="flex items-center justify-between">
 								<span className="text-sm text-muted-foreground">Status</span>
 								<Badge variant={isCarCharging ? "default" : "outline"}>
-									{carData.charging_status
+									{carData.chargingStatus
 										.replace(/_/g, " ")
 										.replace("FOR CHARGING", "")}
 								</Badge>
 							</div>
 							<div className="flex items-center justify-between">
 								<span className="text-sm text-muted-foreground">Power</span>
-								<span>{carData.charging_power_kw} kW</span>
+								<span>{carData.chargingRateKmph} kW</span>
 							</div>
 							<div className="flex items-center justify-between">
 								<span className="text-sm text-muted-foreground">Rate</span>
-								<span>{carData.charging_rate_kmph} km/h</span>
+								<span>{carData.chargingRateKmph} km/h</span>
 							</div>
 						</div>
 					</CardContent>
@@ -111,33 +111,31 @@ export default function CarDashboard() {
 						<div className="space-y-2">
 							<div className="flex items-center justify-between">
 								<span className="text-sm text-muted-foreground">Status</span>
-								<Badge variant="outline">{carData.climate_status}</Badge>
+								<Badge variant="outline">{carData.climateStatus}</Badge>
 							</div>
 							<div className="flex items-center justify-between">
 								<span className="text-sm text-muted-foreground">
 									Target Temperature
 								</span>
-								<span>{carData.target_temp_celsius}°C</span>
+								<span>{carData.targetTempCelsius}°C</span>
 							</div>
 						</div>
 					</CardContent>
 				</Card>
 			</div>
 
+			{/* Charts Section */}
+			<Card className="">
+				<CardHeader>
+					<CardTitle>Battery Level History</CardTitle>
+				</CardHeader>
+				<CardContent className="">
+					<BatteryChart data={batteryLevelData} />
+				</CardContent>
+			</Card>
+
 			{/* Vehicle Status Section */}
 			<VehicleStatus carData={carData} />
-
-			{/* Charts Section */}
-			<div className="grid gap-4 md:grid-cols-2">
-				<Card className="col-span-2">
-					<CardHeader>
-						<CardTitle>Battery Level History</CardTitle>
-					</CardHeader>
-					<CardContent className="pt-2">
-						<BatteryChart data={batteryLevelData} />
-					</CardContent>
-				</Card>
-			</div>
 		</div>
 	);
 }

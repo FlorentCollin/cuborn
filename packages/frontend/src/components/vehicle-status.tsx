@@ -1,6 +1,6 @@
 import type { VehicleStatusLastResponse } from "@/client";
 import { Badge } from "@/components/ui/badge";
-import { Car, DoorClosed, Lock, LockOpen, Square } from "lucide-react";
+import { Car, DoorClosed, Square } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 export function VehicleStatus({
@@ -35,27 +35,27 @@ export function VehicleStatus({
 						<span className="text-sm text-muted-foreground justify-self-start">
 							Front Left
 						</span>
-						{getDoorStatus(carData.doors_front_left)}
+						{getDoorStatus(carData.doorsFrontLeft)}
 						<span className="text-sm text-muted-foreground justify-self-start">
 							Front Right
 						</span>
-						{getDoorStatus(carData.doors_front_right)}
+						{getDoorStatus(carData.doorsFrontRight)}
 						<span className="text-sm text-muted-foreground justify-self-start">
 							Rear Left
 						</span>
-						{getDoorStatus(carData.doors_rear_left)}
+						{getDoorStatus(carData.doorsRearLeft)}
 						<span className="text-sm text-muted-foreground justify-self-start">
 							Rear Right
 						</span>
-						{getDoorStatus(carData.doors_rear_right)}
+						{getDoorStatus(carData.doorsRearRight)}
 						<span className="text-sm text-muted-foreground justify-self-start">
 							Trunk
 						</span>
-						{getDoorStatus(carData.doors_trunk)}
+						{getDoorStatus(carData.doorsTrunk)}
 						<span className="text-sm text-muted-foreground justify-self-start">
 							Hood
 						</span>
-						{getDoorStatus(carData.doors_hood)}
+						{getDoorStatus(carData.doorsHood)}
 					</CardContent>
 				</Card>
 
@@ -69,19 +69,19 @@ export function VehicleStatus({
 						<span className="text-sm text-muted-foreground justify-self-start">
 							Front Left
 						</span>
-						{getWindowStatus(carData.window_front_left)}
+						{getWindowStatus(carData.windowFrontLeft)}
 						<span className="text-sm text-muted-foreground justify-self-start">
 							Front Right
 						</span>
-						{getWindowStatus(carData.window_front_right)}
+						{getWindowStatus(carData.windowFrontRight)}
 						<span className="text-sm text-muted-foreground justify-self-start">
 							Rear Left
 						</span>
-						{getWindowStatus(carData.window_rear_left)}
+						{getWindowStatus(carData.windowRearLeft)}
 						<span className="text-sm text-muted-foreground justify-self-start">
 							Rear Right
 						</span>
-						{getWindowStatus(carData.window_rear_right)}
+						{getWindowStatus(carData.windowRearRight)}
 					</CardContent>
 				</Card>
 
@@ -99,20 +99,20 @@ export function VehicleStatus({
 						</span>
 						<Badge
 							variant={
-								carData.window_heating_front === "OFF" ? "outline" : "default"
+								carData.windowHeatingFront === "OFF" ? "outline" : "default"
 							}
 						>
-							{carData.window_heating_front}
+							{carData.windowHeatingFront}
 						</Badge>
 						<span className="text-sm text-muted-foreground justify-self-start">
 							Rear
 						</span>
 						<Badge
 							variant={
-								carData.window_heating_rear === "OFF" ? "outline" : "default"
+								carData.windowHeatingRear === "OFF" ? "outline" : "default"
 							}
 						>
-							{carData.window_heating_rear}
+							{carData.windowHeatingRear}
 						</Badge>
 					</CardContent>
 				</Card>

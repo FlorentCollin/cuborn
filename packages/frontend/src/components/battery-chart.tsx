@@ -14,20 +14,11 @@ export function BatteryChart({
 			config={{
 				batteryLevel: {
 					label: "Battery Level",
-					color: "hsl(var(--chart-1))",
 				},
 			}}
-			className=""
+			className="aspect-auto h-[250px] w-full"
 		>
-			<AreaChart
-				data={data}
-				margin={{
-					top: 5,
-					right: 10,
-					left: 10,
-					bottom: 5,
-				}}
-			>
+			<AreaChart data={data}>
 				<CartesianGrid vertical={false} />
 				<XAxis
 					dataKey="time"

@@ -1,8 +1,13 @@
+import { desc, sql } from "drizzle-orm";
 import { Hono } from "hono";
 import { describeRoute } from "hono-openapi";
 import { resolver } from "hono-openapi/zod";
 import { z } from "zod";
-import { VehicleStatus, connection } from "./db";
+import { db } from "./db";
+import {
+	VehicleStatusTableSelect,
+	vehicleStatusTable,
+} from "./vehicle-status.sql";
 
 export const vehicleStatus = new Hono();
 
@@ -14,30 +19,30 @@ vehicleStatus.get(
 			200: {
 				description: "OK",
 				content: {
-					"application/json": { schema: resolver(VehicleStatus) },
+					"application/json": { schema: resolver(VehicleStatusTableSelect) },
 				},
 			},
 		},
+		validateResponse: true,
 	}),
 	async (c) => {
-		const reader = await connection.runAndReadAll(
-			"SELECT * FROM vehicle_status ORDER BY id DESC LIMIT 1",
-		);
-		const rows = reader.getRowObjectsJson();
-		return c.json(rows[0]);
+		const lastRow = await db.query.vehicleStatusTable.findFirst({
+			orderBy: desc(vehicleStatusTable.createdAt),
+		});
+		return c.json(lastRow);
 	},
 );
 
 const BatteryLevelResponse = z.object({
-	min_battery_level_percentage: z.string().nullable(),
 	time: z.string(),
+	min_battery_level_percentage: z.string().nullable(),
 });
-type BatteryLevelResponse = z.infer<typeof BatteryLevelResponse>;
 
 vehicleStatus.get(
 	"/battery-level",
 	describeRoute({
 		description: "Get the battery level history",
+		validateResponse: true,
 		responses: {
 			200: {
 				description: "OK",
@@ -50,25 +55,67 @@ vehicleStatus.get(
 		},
 	}),
 	async (c) => {
-		const reader = await connection.runAndReadAll(`
-		with hourly_series as (
-			select unnest(generate_series(
-				date_trunc('hour', now() - interval '1 days' - interval '3 hours'),
-				date_trunc('hour', now()),
-				interval '1 hour'
-			)) as hour
-		)
-		select 
-			hourly_series.hour as time,
-			coalesce(min(status.battery_level), null) as min_battery_level_percentage
-		from hourly_series
-		left join vehicle_status status on 
-			time_bucket('1h', status.created_at::timestamptz) = hourly_series.hour
-		group by hourly_series.hour
-		order by hourly_series.hour;`);
-
-		return c.json(
-			BatteryLevelResponse.array().parse(reader.getRowObjectsJson()),
-		);
+		const history = await batteryLevelsHistory();
+		return c.json(history);
 	},
 );
+
+async function batteryLevelsHistory() {
+	const rawData = db.$with("raw_data").as(
+		db
+			.select({
+				created_at: vehicleStatusTable.createdAt,
+				battery_level: vehicleStatusTable.batteryLevel,
+				prev_level:
+					sql<number>`LAG(${vehicleStatusTable.batteryLevel}) OVER (ORDER BY ${vehicleStatusTable.createdAt})`.as(
+						"prev_level",
+					),
+				next_level:
+					sql<number>`LEAD(${vehicleStatusTable.batteryLevel}) OVER (ORDER BY ${vehicleStatusTable.createdAt})`.as(
+						"next_level",
+					),
+			})
+			.from(vehicleStatusTable)
+			.where(
+				sql`${vehicleStatusTable.createdAt} >= datetime('now', 'localtime', '-24 hours')`,
+			),
+	);
+
+	const significantChanges = db.$with("significant_changes").as(
+		db
+			.select({
+				created_at: rawData.created_at,
+				battery_level: rawData.battery_level,
+			})
+			.from(rawData)
+			.where(sql`
+      ABS(COALESCE(battery_level - prev_level, 0)) > 5 OR 
+      ABS(COALESCE(battery_level - next_level, 0)) > 5
+    `)
+			.union(
+				db
+					.select({
+						created_at: rawData.created_at,
+						battery_level: rawData.battery_level,
+					})
+					.from(rawData)
+					.where(sql`strftime('%M', created_at) = '00'`),
+			),
+	);
+
+	const result = await db
+		.with(rawData, significantChanges)
+		.select({
+			time: sql<string>`datetime(strftime('%Y-%m-%d %H:%M:00', created_at))`.as(
+				"time",
+			),
+			min_battery_level_percentage: sql<number>`battery_level`.as(
+				"min_battery_level_percentage",
+			),
+		})
+		.from(significantChanges)
+		.orderBy(sql`time`)
+		.all();
+
+	return result;
+}
