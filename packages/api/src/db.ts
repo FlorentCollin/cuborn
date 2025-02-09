@@ -7,6 +7,3 @@ export const db = drizzle(process.env.DATABASE_URL!, {
 	},
 	logger: false,
 });
-
-const result = await db.query.vehicleStatusTable.findMany();
-console.log(result);
