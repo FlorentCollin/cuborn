@@ -16,3 +16,6 @@ export type VehicleStatusLastResponse =
 
 export type VehicleStatusBatteryLevelResponse =
 	paths["/vehicle-status/battery-level"]["get"]["responses"]["200"]["content"]["application/json"];
+
+export type VehicleStatusBatteryLevelQuery =
+	paths["/vehicle-status/battery-level"]["get"]["parameters"]["query"]["timeRange"];

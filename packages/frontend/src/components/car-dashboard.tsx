@@ -12,13 +12,10 @@ export default function CarDashboard() {
 		"/vehicle-status/last",
 	);
 
-	const { data: batteryLevelData, isLoading: isLoadingBatteryLevel } =
-		$api.useQuery("get", "/vehicle-status/battery-level");
-
-	if (isLoading || isLoadingBatteryLevel) {
+	if (isLoading) {
 		return <div>Loading...</div>;
 	}
-	if (!carData || !batteryLevelData) {
+	if (!carData) {
 		return <div>could not fetch data</div>;
 	}
 
@@ -125,14 +122,7 @@ export default function CarDashboard() {
 			</div>
 
 			{/* Charts Section */}
-			<Card className="">
-				<CardHeader>
-					<CardTitle>Battery Level History</CardTitle>
-				</CardHeader>
-				<CardContent className="">
-					<BatteryChart data={batteryLevelData} />
-				</CardContent>
-			</Card>
+			<BatteryChart />
 
 			{/* Vehicle Status Section */}
 			<VehicleStatus carData={carData} />

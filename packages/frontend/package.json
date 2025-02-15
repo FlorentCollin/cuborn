@@ -67,6 +67,7 @@
 		"zod": "^3.24.1"
 	},
 	"devDependencies": {
+		"@tanstack/react-query-devtools": "5",
 		"@tanstack/router-plugin": "1.98.4",
 		"@types/node": "^22.13.0",
 		"@types/react": "18.2.22",

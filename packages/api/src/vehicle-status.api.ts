@@ -1,7 +1,7 @@
 import { desc, sql } from "drizzle-orm";
 import { Hono } from "hono";
 import { describeRoute } from "hono-openapi";
-import { resolver } from "hono-openapi/zod";
+import { resolver, validator } from "hono-openapi/zod";
 import { z } from "zod";
 import { db } from "./db";
 import {
@@ -54,13 +54,21 @@ vehicleStatus.get(
 			},
 		},
 	}),
+	validator(
+		"query",
+		z.object({
+			timeRange: z.enum(["1 day", "7 day", "30 day", "90 day"]),
+		}),
+	),
 	async (c) => {
-		const history = await batteryLevelsHistory();
+		const query = c.req.valid("query");
+		const history = await batteryLevelsHistory(query.timeRange);
 		return c.json(history);
 	},
 );
 
-async function batteryLevelsHistory() {
+async function batteryLevelsHistory(timeRange: string) {
+	console.log("BatteryLevelsHistory", timeRange);
 	const rawData = db.$with("raw_data").as(
 		db
 			.select({
@@ -77,7 +85,7 @@ async function batteryLevelsHistory() {
 			})
 			.from(vehicleStatusTable)
 			.where(
-				sql`${vehicleStatusTable.createdAt} >= datetime('now', 'localtime', '-24 hours')`,
+				sql`${vehicleStatusTable.createdAt} >= datetime('now', 'localtime', '-' || ${timeRange})`,
 			),
 	);
 
