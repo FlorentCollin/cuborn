@@ -35,7 +35,7 @@ vehicleStatus.get(
 
 const BatteryLevelResponse = z.object({
 	time: z.string(),
-	min_battery_level_percentage: z.string().nullable(),
+	min_battery_level_percentage: z.number().nullable(),
 });
 
 vehicleStatus.get(
