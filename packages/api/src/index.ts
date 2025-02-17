@@ -3,9 +3,21 @@ import { Hono } from "hono";
 import { serveStatic } from "hono/bun";
 import { logger } from "hono/logger";
 import { appRouter } from "./router";
+import { cors } from "hono/cors";
 
-const app = new Hono()
-	.use(logger())
+const app = new Hono().use(logger());
+app
+	.use(
+		"/trpc/*",
+		cors({
+			origin: "*",
+			allowHeaders: [],
+			allowMethods: ["POST", "GET", "OPTIONS"],
+			exposeHeaders: [],
+			maxAge: 600,
+			credentials: true,
+		}),
+	)
 	.use(
 		"/trpc/*",
 		trpcServer({
