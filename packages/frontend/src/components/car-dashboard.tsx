@@ -1,36 +1,31 @@
-import { $api } from "@/client";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { trpc } from "@/trpc";
 import { Battery, Gauge, ThermometerSun, Zap } from "lucide-react";
 import { BatteryChart } from "./battery-chart";
 import { VehicleStatus } from "./vehicle-status";
 
 export default function CarDashboard() {
-	const { data: carData, isLoading } = $api.useQuery(
-		"get",
-		"/vehicle-status/last",
-	);
+	const { data, isLoading } = trpc.vehicleStatus.last.useQuery();
 
 	if (isLoading) {
 		return <div>Loading...</div>;
 	}
-	if (!carData) {
+	if (!data) {
 		return <div>could not fetch data</div>;
 	}
 
-	const isCarCharging = carData.chargingStatus === "CHARGING";
+	const isCarCharging = data.chargingStatus === "CHARGING";
 	const textColor = isCarCharging ? "text-green-500" : "";
 	return (
 		<div className="space-y-4">
 			<div className="flex items-center justify-between">
 				<h1 className="text-xl">CUPRA Born Dashboard</h1>
 				<Badge
-					variant={
-						carData.connectionStatus === "ONLINE" ? "default" : "secondary"
-					}
+					variant={data.connectionStatus === "ONLINE" ? "default" : "secondary"}
 				>
-					{carData.connectionStatus}
+					{data.connectionStatus}
 				</Badge>
 			</div>
 
@@ -43,11 +38,11 @@ export default function CarDashboard() {
 					</CardHeader>
 					<CardContent>
 						<div className={`text-2xl font-bold ${textColor}`}>
-							{carData.batteryLevel}%
+							{data.batteryLevel}%
 						</div>
-						<Progress value={carData.batteryLevel} className="mt-2" />
+						<Progress value={data.batteryLevel} className="mt-2" />
 						<p className="mt-2 text-xs text-muted-foreground">
-							Target: {carData.targetSoc}%
+							Target: {data.targetSoc}%
 						</p>
 					</CardContent>
 				</Card>
@@ -59,7 +54,7 @@ export default function CarDashboard() {
 						<Gauge className="h-4 w-4 text-muted-foreground" />
 					</CardHeader>
 					<CardContent>
-						<div className="text-2xl font-bold">{carData.rangeKm} km</div>
+						<div className="text-2xl font-bold">{data.rangeKm} km</div>
 						<p className="text-xs text-muted-foreground">
 							Estimated remaining range
 						</p>
@@ -79,18 +74,18 @@ export default function CarDashboard() {
 							<div className="flex items-center justify-between">
 								<span className="text-sm text-muted-foreground">Status</span>
 								<Badge variant={isCarCharging ? "default" : "outline"}>
-									{carData.chargingStatus
+									{data.chargingStatus
 										.replace(/_/g, " ")
 										.replace("FOR CHARGING", "")}
 								</Badge>
 							</div>
 							<div className="flex items-center justify-between">
 								<span className="text-sm text-muted-foreground">Power</span>
-								<span>{carData.chargingRateKmph} kW</span>
+								<span>{data.chargingRateKmph} kW</span>
 							</div>
 							<div className="flex items-center justify-between">
 								<span className="text-sm text-muted-foreground">Rate</span>
-								<span>{carData.chargingRateKmph} km/h</span>
+								<span>{data.chargingRateKmph} km/h</span>
 							</div>
 						</div>
 					</CardContent>
@@ -108,13 +103,13 @@ export default function CarDashboard() {
 						<div className="space-y-2">
 							<div className="flex items-center justify-between">
 								<span className="text-sm text-muted-foreground">Status</span>
-								<Badge variant="outline">{carData.climateStatus}</Badge>
+								<Badge variant="outline">{data.climateStatus}</Badge>
 							</div>
 							<div className="flex items-center justify-between">
 								<span className="text-sm text-muted-foreground">
 									Target Temperature
 								</span>
-								<span>{carData.targetTempCelsius}°C</span>
+								<span>{data.targetTempCelsius}°C</span>
 							</div>
 						</div>
 					</CardContent>
@@ -125,7 +120,7 @@ export default function CarDashboard() {
 			<BatteryChart />
 
 			{/* Vehicle Status Section */}
-			<VehicleStatus carData={carData} />
+			<VehicleStatus carData={data} />
 		</div>
 	);
 }

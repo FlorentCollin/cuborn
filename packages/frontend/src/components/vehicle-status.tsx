@@ -1,11 +1,11 @@
-import type { VehicleStatusLastResponse } from "@/client";
 import { Badge } from "@/components/ui/badge";
+import type { RouterOutputs } from "@/trpc";
 import { Car, DoorClosed, Square } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 export function VehicleStatus({
 	carData,
-}: { carData: VehicleStatusLastResponse }) {
+}: { carData: RouterOutputs["vehicleStatus"]["last"] }) {
 	const getDoorStatus = (status: string) => {
 		return (
 			<Badge variant={status === "CLOSED" ? "outline" : "destructive"}>

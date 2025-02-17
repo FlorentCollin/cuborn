@@ -16,6 +16,7 @@
 		"typescript": "^5.0.0"
 	},
 	"dependencies": {
+		"@hey-api/client-fetch": "^0.8.1",
 		"@libsql/client": "^0.14.0",
 		"drizzle-kit": "^0.30.4"
 	}

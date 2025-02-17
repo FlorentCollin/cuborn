@@ -4,16 +4,13 @@
 		"dev": "bun run --hot src/index.ts"
 	},
 	"dependencies": {
+		"@hono/trpc-server": "^0.3.4",
 		"@hono/zod-validator": "^0.4.2",
 		"@libsql/client": "^0.14.0",
-		"@scalar/hono-api-reference": "^0.5.170",
+		"@trpc/server": "^11.0.0-rc.768",
 		"drizzle-orm": "^0.39.2",
 		"hono": "^4.6.20",
-		"hono-openapi": "^0.4.4",
-		"openapi-fetch": "^0.13.4",
-		"openapi-typescript": "^7.6.0",
-		"zod": "^3.24.1",
-		"zod-openapi": "^4.2.3"
+		"zod": "^3.24.1"
 	},
 	"devDependencies": {
 		"@types/bun": "latest"

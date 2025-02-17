@@ -1,13 +1,9 @@
 import {
-	$api,
-	type VehicleStatusBatteryLevelQuery,
-	type VehicleStatusBatteryLevelResponse,
-} from "@/client";
-import {
 	ChartContainer,
 	ChartTooltip,
 	ChartTooltipContent,
 } from "@/components/ui/chart";
+import { type RouterInputs, trpc } from "@/trpc";
 import { useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
@@ -19,15 +15,13 @@ import {
 	SelectValue,
 } from "./ui/select";
 
+type BatteryLevelInput = RouterInputs["vehicleStatus"]["batteryLevelHistory"];
+
 export function BatteryChart() {
 	const [timeRange, setTimeRange] =
-		useState<VehicleStatusBatteryLevelQuery>("1 day");
-	const { data } = $api.useQuery("get", "/vehicle-status/battery-level", {
-		params: {
-			query: {
-				timeRange,
-			},
-		},
+		useState<BatteryLevelInput["timeRange"]>("1 day");
+	const { data } = trpc.vehicleStatus.batteryLevelHistory.useQuery({
+		timeRange: timeRange,
 	});
 
 	return (
@@ -37,7 +31,7 @@ export function BatteryChart() {
 				<Select
 					value={timeRange}
 					onValueChange={(v) =>
-						setTimeRange(v as VehicleStatusBatteryLevelQuery)
+						setTimeRange(v as BatteryLevelInput["timeRange"])
 					}
 				>
 					<SelectTrigger
