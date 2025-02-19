@@ -2,12 +2,13 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { trpc } from "@/trpc";
-import { Battery, Gauge, ThermometerSun, Zap } from "lucide-react";
+import { Battery, Gauge, ThermometerSun, TrendingUp, Zap } from "lucide-react";
 import { BatteryChart } from "./battery-chart";
 import { VehicleStatus } from "./vehicle-status";
 
 export default function CarDashboard() {
 	const { data, isLoading } = trpc.vehicleStatus.last.useQuery();
+	const { data: stats } = trpc.vehicleStatus.statsThisMonth.useQuery();
 
 	if (isLoading) {
 		return <div>Loading...</div>;
@@ -94,22 +95,20 @@ export default function CarDashboard() {
 				{/* Climate Control Card */}
 				<Card>
 					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-						<CardTitle className="text-sm font-medium">
-							Climate Control
-						</CardTitle>
-						<ThermometerSun className="h-4 w-4 text-muted-foreground" />
+						<CardTitle className="text-sm font-medium">Monthly Stats</CardTitle>
+						<TrendingUp className="h-4 w-4 text-muted-foreground" />
 					</CardHeader>
 					<CardContent>
 						<div className="space-y-2">
 							<div className="flex items-center justify-between">
-								<span className="text-sm text-muted-foreground">Status</span>
-								<Badge variant="outline">{data.climateStatus}</Badge>
+								<span className="text-sm text-muted-foreground">Distance</span>
+								<span>{stats?.kmThisMonth} km</span>
 							</div>
 							<div className="flex items-center justify-between">
 								<span className="text-sm text-muted-foreground">
-									Target Temperature
+									Total Battery Used
 								</span>
-								<span>{data.targetTempCelsius}°C</span>
+								<span>{stats?.batteryUsedPercentage}%</span>
 							</div>
 						</div>
 					</CardContent>

@@ -1,4 +1,4 @@
-import { desc, sql } from "drizzle-orm";
+import { desc, gte, sql } from "drizzle-orm";
 import "zod-openapi/extend";
 import assert from "node:assert";
 import { z } from "zod";
@@ -49,7 +49,7 @@ export const vehicleStatusRouter = router({
 					})
 					.from(rawData)
 					.where(sql`
-      ABS(COALESCE(battery_level - prev_level, 0)) > 5 OR 
+      ABS(COALESCE(battery_level - prev_level, 0)) > 5 OR
       ABS(COALESCE(battery_level - next_level, 0)) > 5
     `)
 					.union(
@@ -79,4 +79,53 @@ export const vehicleStatusRouter = router({
 
 			return result;
 		}),
+	statsThisMonth: publicProcedure.query(async () => {
+		const kmResult = await db
+			.select({
+				kmThisMonth: sql<number>`
+                MAX(${vehicleStatusTable.odometerKm}) - MIN(${vehicleStatusTable.odometerKm})
+            `.as("km_this_month"),
+			})
+			.from(vehicleStatusTable)
+			.where(
+				gte(vehicleStatusTable.createdAt, sql`date('now', 'start of month')`),
+			);
+		assert(kmResult[0]);
+
+		const batteryChanges = db.$with("battery_changes").as(
+			db
+				.select({
+					batteryLevel: vehicleStatusTable.batteryLevel,
+					prevBatteryLevel:
+						sql<number>`LAG(${vehicleStatusTable.batteryLevel}) OVER (ORDER BY ${vehicleStatusTable.createdAt})`.as(
+							"prev_battery_level",
+						),
+				})
+				.from(vehicleStatusTable)
+				.where(
+					gte(vehicleStatusTable.createdAt, sql`date('now', 'start of month')`),
+				),
+		);
+
+		const batteryResult = await db
+			.with(batteryChanges)
+			.select({
+				batteryUsedPercentage: sql<number>`
+            SUM(
+                CASE
+                    WHEN battery_level < prev_battery_level
+                    THEN prev_battery_level - battery_level
+                    ELSE 0
+                END
+            )
+        `.as("battery_used_percentage"),
+			})
+			.from(batteryChanges);
+
+		assert(batteryResult[0]);
+		return {
+			kmThisMonth: kmResult[0].kmThisMonth,
+			batteryUsedPercentage: batteryResult[0].batteryUsedPercentage,
+		};
+	}),
 });

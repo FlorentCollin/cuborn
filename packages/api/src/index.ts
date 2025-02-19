@@ -1,9 +1,9 @@
 import { trpcServer } from "@hono/trpc-server";
 import { Hono } from "hono";
 import { serveStatic } from "hono/bun";
+import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { appRouter } from "./router";
-import { cors } from "hono/cors";
 
 const app = new Hono().use(logger());
 app

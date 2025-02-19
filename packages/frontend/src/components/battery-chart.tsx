@@ -56,7 +56,7 @@ export function BatteryChart() {
 					</SelectContent>
 				</Select>
 			</CardHeader>
-			<CardContent className="">
+			<CardContent className="pt-4">
 				<ChartContainer
 					config={{
 						batteryLevel: {
@@ -86,7 +86,7 @@ export function BatteryChart() {
 						<Area
 							type="monotone"
 							dataKey="min_battery_level_percentage"
-							dot={true}
+							dot={false}
 							strokeWidth={2}
 							connectNulls={true}
 						/>

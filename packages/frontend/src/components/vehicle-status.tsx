@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import type { RouterOutputs } from "@/trpc";
-import { Car, DoorClosed, Square } from "lucide-react";
+import { Car, DoorClosed, Square, ThermometerSun } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 export function VehicleStatus({
@@ -25,7 +25,7 @@ export function VehicleStatus({
 	return (
 		<div>
 			{/* Doors Status */}
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+			<div className="grid grid-cols-1 md:grid-cols-4 gap-2">
 				<Card>
 					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 						<CardTitle className="text-sm font-medium">Doors</CardTitle>
@@ -59,6 +59,29 @@ export function VehicleStatus({
 					</CardContent>
 				</Card>
 
+				{/* Climate Control Card */}
+				<Card>
+					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+						<CardTitle className="text-sm font-medium">
+							Climate Control
+						</CardTitle>
+						<ThermometerSun className="h-4 w-4 text-muted-foreground" />
+					</CardHeader>
+					<CardContent>
+						<div className="space-y-2">
+							<div className="flex items-center justify-between">
+								<span className="text-sm text-muted-foreground">Status</span>
+								<Badge variant="outline">{carData.climateStatus}</Badge>
+							</div>
+							<div className="flex items-center justify-between">
+								<span className="text-sm text-muted-foreground">
+									Target Temperature
+								</span>
+								<span>{carData.targetTempCelsius}°C</span>
+							</div>
+						</div>
+					</CardContent>
+				</Card>
 				{/* Windows Status */}
 				<Card>
 					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
