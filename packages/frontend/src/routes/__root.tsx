@@ -15,7 +15,7 @@ const trpcClient = trpc.createClient({
 		httpBatchLink({
 			url:
 				import.meta.env.MODE === "production"
-					? "http://apollo.taila4c2d3.ts.net:3000/trpc"
+					? "https://apollo.taila4c2d3.ts.net/trpc"
 					: "http://localhost:3000/trpc",
 			async headers() {
 				return {
