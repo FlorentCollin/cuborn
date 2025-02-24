@@ -11,7 +11,7 @@ export default defineConfig({
 	plugins: [
 		TanStackRouterVite({}),
 		react(),
-		viteCompression(),
+		viteCompression({ algorithm: "brotliCompress" }),
 		VitePWA({
 			registerType: "autoUpdate",
 			manifest: {
