@@ -113,8 +113,8 @@ export const vehicleStatusRouter = router({
 				batteryUsedPercentage: sql<number>`
             SUM(
                 CASE
-                    WHEN battery_level < prev_battery_level
-                    THEN prev_battery_level - battery_level
+                    WHEN ${vehicleStatusTable.batteryLevel} < ${batteryChanges.prevBatteryLevel}
+                    THEN ${batteryChanges.prevBatteryLevel} - ${vehicleStatusTable.batteryLevel}
                     ELSE 0
                 END
             )
