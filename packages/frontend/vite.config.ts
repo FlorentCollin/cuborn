@@ -18,6 +18,7 @@ export default defineConfig({
 				name: "Cuborn",
 				short_name: "Cuborn",
 				description: "Cuborn",
+				theme_color: "#09090b",
 				icons: [
 					{
 						src: "windows11/SmallTile.scale-100.png",
