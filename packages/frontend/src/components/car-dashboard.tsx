@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { trpc } from "@/trpc";
-import { Battery, Gauge, ThermometerSun, TrendingUp, Zap } from "lucide-react";
+import { Battery, Gauge, TrendingUp, Zap } from "lucide-react";
 import { BatteryChart } from "./battery-chart";
 import { VehicleStatus } from "./vehicle-status";
 

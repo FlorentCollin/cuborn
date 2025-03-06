@@ -6,7 +6,8 @@
 		"format": "biome format --write .",
 		"check": "biome check --write .",
 		"ci": "biome ci .",
-		"backup-locally": "ssh root@apollo 'sqlite3 \"/root/.local/share/cupra/vehicle_status.db\" \".backup /root/.local/share/cupra/backup/vehicle_status.db\"' && rsync -avlP 'root@apollo:/root/.local/share/cupra/backup/*' ~/.local/share/cupra/"
+		"backup-locally": "ssh root@apollo 'sqlite3 \"/root/.local/share/cupra/vehicle_status.db\" \".backup /root/.local/share/cupra/backup/vehicle_status.db\"' && rsync -avlP 'root@apollo:/root/.local/share/cupra/backup/*' ~/.local/share/cupra/",
+		"dev": "bun --elide-lines=0 --filter='*' dev"
 	},
 	"workspaces": ["packages/*"],
 	"devDependencies": {

@@ -1,43 +1,25 @@
 import { ThemeProvider } from "@/components/theme-provider";
-import { trpc } from "@/trpc";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { AppRouterQueryUtils, trpc } from "@/trpc";
+import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Outlet, createRootRoute } from "@tanstack/react-router";
-import { httpBatchLink } from "@trpc/client";
+import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{
+	queryClient: QueryClient;
+	trpc: ReturnType<typeof trpc.createClient>;
+	trpcUtils: AppRouterQueryUtils;
+}>()({
 	component: RootComponent,
-});
-
-const queryClient = new QueryClient();
-const trpcClient = trpc.createClient({
-	links: [
-		httpBatchLink({
-			url:
-				import.meta.env.MODE === "production"
-					? "https://apollo.taila4c2d3.ts.net/trpc"
-					: "http://localhost:3000/trpc",
-			async headers() {
-				return {
-					// authorization: getAuthCookie(),
-				};
-			},
-		}),
-	],
 });
 
 function RootComponent() {
 	return (
 		<>
 			<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-				<trpc.Provider client={trpcClient} queryClient={queryClient}>
-					<QueryClientProvider client={queryClient}>
-						{import.meta.env.MODE === "development" && (
-							<ReactQueryDevtools initialIsOpen={false} />
-						)}
-						<Outlet />
-					</QueryClientProvider>
-				</trpc.Provider>
+				{import.meta.env.MODE === "development" && (
+					<ReactQueryDevtools initialIsOpen={false} />
+				)}
+				<Outlet />
 			</ThemeProvider>
 		</>
 	);
