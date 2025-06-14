@@ -71,8 +71,15 @@ export function BatteryChart() {
 							dataKey="time"
 							tickLine={false}
 							axisLine={false}
-							tickFormatter={(value) => new Date(value).toLocaleString()}
-							tickMargin={10}
+							tickMargin={8}
+							minTickGap={32}
+							tickFormatter={(value) => {
+								const date = new Date(value);
+								return date.toLocaleDateString("en-US", {
+									month: "short",
+									day: "numeric",
+								});
+							}}
 						/>
 						<YAxis
 							dataKey="min_battery_level_percentage"
