@@ -3,15 +3,31 @@ import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "tailwindcss";
 import { defineConfig } from "vite";
-import viteCompression from "vite-plugin-compression";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+	server: {
+		proxy: {
+			"/trpc": {
+				target: "http://localhost:8787",
+				changeOrigin: true,
+			},
+		},
+	},
+	css: {
+		postcss: {
+			plugins: [tailwindcss()],
+		},
+	},
+	resolve: {
+		alias: {
+			"@": path.resolve(__dirname, "./src"),
+		},
+	},
 	plugins: [
 		TanStackRouterVite({}),
 		react(),
-		viteCompression({ algorithm: "brotliCompress" }),
 		VitePWA({
 			registerType: "autoUpdate",
 			manifest: {
@@ -481,14 +497,4 @@ export default defineConfig({
 			},
 		}),
 	],
-	css: {
-		postcss: {
-			plugins: [tailwindcss()],
-		},
-	},
-	resolve: {
-		alias: {
-			"@": path.resolve(__dirname, "./src"),
-		},
-	},
 });

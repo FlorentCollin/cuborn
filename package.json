@@ -7,18 +7,19 @@
 		"check": "biome check --write .",
 		"ci": "biome ci .",
 		"backup-locally": "ssh root@apollo 'sqlite3 \"/root/.local/share/cupra/vehicle_status.db\" \".backup /root/.local/share/cupra/backup/vehicle_status.db\"' && rsync -avlP 'root@apollo:/root/.local/share/cupra/backup/*' ~/.local/share/cupra/",
-		"dev": "bun --elide-lines=0 --filter='*' dev"
+		"dev": "bun --elide-lines=0 --filter='*' dev",
+		"deploy": "bun run --filter='*' build && bun run --filter='*' deploy"
 	},
 	"workspaces": ["packages/*"],
 	"devDependencies": {
 		"@types/bun": "latest"
 	},
 	"peerDependencies": {
-		"typescript": "^5.0.0"
+		"typescript": "^5.7.3"
 	},
 	"dependencies": {
-		"@hey-api/client-fetch": "^0.8.1",
 		"@libsql/client": "^0.14.0",
-		"drizzle-kit": "^0.30.4"
+		"drizzle-kit": "^0.30.6",
+		"wrangler": "^4.20.0"
 	}
 }

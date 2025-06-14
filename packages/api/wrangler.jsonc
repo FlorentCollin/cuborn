@@ -1,0 +1,26 @@
+{
+	"name": "cuborn",
+	"main": "./src/index.ts",
+	"compatibility_date": "2025-05-25",
+	"workers_dev": true,
+	"observability": {
+		"enabled": true
+	},
+	"d1_databases": [
+		{
+			"binding": "CUBORN_DB",
+			"database_name": "cuborn",
+			"database_id": "f283d39d-22f5-43d1-8a68-7d8d540f378b",
+			"migrations_dir": "./drizzle"
+		}
+	],
+	"assets": { "directory": "../frontend/dist", "binding": "ASSETS" },
+	"env": {
+		"development": {
+			"vars": {
+				"BASE_URL": "http://localhost:3000",
+				"FRONTEND_URL": "http://localhost:5173"
+			}
+		}
+	}
+}

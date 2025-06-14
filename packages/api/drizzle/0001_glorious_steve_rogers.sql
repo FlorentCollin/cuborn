@@ -1,0 +1,2 @@
+CREATE INDEX `idx_vehicle_status_created_at` ON `vehicle_status` (`created_at`);--> statement-breakpoint
+CREATE INDEX `idx_vehicle_status_created_at_odometer` ON `vehicle_status` (`created_at`,`odometer_km`);

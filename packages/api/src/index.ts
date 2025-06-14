@@ -1,9 +1,9 @@
 import { trpcServer } from "@hono/trpc-server";
 import { Hono } from "hono";
-import { serveStatic } from "hono/bun";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
-import { appRouter } from "./router";
+import { createContext } from "./context/context";
+import { appRouter } from "./routers/app";
 
 const app = new Hono().use(logger());
 app
@@ -22,16 +22,7 @@ app
 		"/trpc/*",
 		trpcServer({
 			router: appRouter,
-		}),
-	)
-	.get(
-		"*",
-		serveStatic({
-			root: "../frontend/dist",
-			precompressed: true,
-			onFound: (_path, c) => {
-				c.header("Cache-Control", "public, immutable, max-age=31556952");
-			},
+			createContext,
 		}),
 	);
 

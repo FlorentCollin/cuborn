@@ -1,18 +1,20 @@
 {
-	"name": "api",
+	"name": "@cuborn/api",
 	"scripts": {
-		"dev": "bun run --hot src/index.ts"
+		"dev": "wrangler dev",
+		"deploy": "wrangler deploy"
 	},
 	"dependencies": {
 		"@hono/trpc-server": "^0.3.4",
 		"@hono/zod-validator": "^0.4.2",
-		"@libsql/client": "^0.14.0",
 		"@trpc/server": "^11.0.0-rc.768",
 		"drizzle-orm": "^0.39.2",
 		"hono": "^4.6.20",
 		"zod": "^3.24.1"
 	},
 	"devDependencies": {
-		"@types/bun": "latest"
+		"@types/uuid": "^10.0.0",
+		"drizzle-kit": "^0.31.0",
+		"uuid": "^11.1.0"
 	}
 }

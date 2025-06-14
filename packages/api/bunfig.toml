@@ -1,0 +1,3 @@
+[test]
+# Preload the test setup file before running tests
+preload = ["./src/__tests__/setup/test-setup.ts"]

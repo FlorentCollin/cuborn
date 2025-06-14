@@ -11,10 +11,7 @@ const queryClient = new QueryClient();
 const trpcClient = trpc.createClient({
 	links: [
 		httpBatchLink({
-			url:
-				import.meta.env.MODE === "production"
-					? "https://apollo.taila4c2d3.ts.net/trpc"
-					: "http://localhost:3000/trpc",
+			url: "/trpc",
 			async headers() {
 				return {
 					// authorization: getAuthCookie(),
