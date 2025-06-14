@@ -8,11 +8,16 @@
 		"@hono/trpc-server": "^0.3.4",
 		"@hono/zod-validator": "^0.4.2",
 		"@trpc/server": "^11.0.0-rc.768",
+		"better-auth": "^1.2.9",
+		"better-auth-cloudflare": "^0.1.5",
 		"drizzle-orm": "^0.39.2",
+		"drizzle-zod": "^0.8.2",
 		"hono": "^4.6.20",
-		"zod": "^3.24.1"
+		"ulid": "^3.0.1",
+		"zod": "^3.25.64"
 	},
 	"devDependencies": {
+		"@better-auth/cli": "^1.2.9",
 		"@types/uuid": "^10.0.0",
 		"drizzle-kit": "^0.31.0",
 		"uuid": "^11.1.0"

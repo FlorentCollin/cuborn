@@ -1,14 +1,18 @@
-import CarDashboard from "@/components/car-dashboard";
-import { createFileRoute } from "@tanstack/react-router";
+import { CarDashboard } from "@/components/car-dashboard";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
 	component: HomeComponent,
-	loader: ({ context: { trpcUtils } }) => {
-		trpcUtils.vehicleStatus.last.ensureData();
-		trpcUtils.vehicleStatus.batteryLevelHistory.ensureData({
+	loader: async ({ context: { trpc } }) => {
+		try {
+			await trpc.vehicleStatus.last.ensureData();
+		} catch (e) {
+			throw redirect({ to: "/login" });
+		}
+		trpc.vehicleStatus.batteryLevelHistory.ensureData({
 			timeRange: "1 day",
 		});
-		trpcUtils.vehicleStatus.batteryLevelHistory.ensureData({
+		trpc.vehicleStatus.batteryLevelHistory.ensureData({
 			timeRange: "7 day",
 		});
 	},

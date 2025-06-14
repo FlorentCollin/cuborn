@@ -1,4 +1,5 @@
 {
+	"$schema": "../../node_modules/wrangler/config-schema.json",
 	"name": "cuborn",
 	"main": "./src/index.ts",
 	"compatibility_date": "2025-05-25",
@@ -14,13 +15,30 @@
 			"migrations_dir": "./drizzle"
 		}
 	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "CRON_INSERT_TEST_DB",
+				"class_name": "CronInsertTestDb"
+			}
+		]
+	},
 	"assets": { "directory": "../frontend/dist", "binding": "ASSETS" },
+	"vars": {
+		"BASE_URL": "https://cuborn.florentcollinpro.workers.dev"
+	},
 	"env": {
-		"development": {
+		"dev": {
 			"vars": {
-				"BASE_URL": "http://localhost:3000",
-				"FRONTEND_URL": "http://localhost:5173"
+				"GITHUB_CLIENT_ID": "<set_by_dev_vars>",
+				"GITHUB_CLIENT_SECRET": "<set_by_dev_vars>"
 			}
 		}
-	}
+	},
+	"migrations": [
+		{
+			"tag": "cron_insert_test_db",
+			"new_sqlite_classes": ["CronInsertTestDb"]
+		}
+	]
 }

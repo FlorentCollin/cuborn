@@ -9,6 +9,10 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
 	server: {
 		proxy: {
+			"/api": {
+				target: "http://localhost:8787",
+				changeOrigin: true,
+			},
 			"/trpc": {
 				target: "http://localhost:8787",
 				changeOrigin: true,
@@ -30,6 +34,7 @@ export default defineConfig({
 		react(),
 		VitePWA({
 			registerType: "autoUpdate",
+			workbox: { navigateFallbackDenylist: [/^\/api/] },
 			manifest: {
 				name: "Cuborn",
 				short_name: "Cuborn",

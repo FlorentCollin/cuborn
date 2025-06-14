@@ -11,7 +11,6 @@ export function createContext() {
 	return {
 		db: db,
 		vehicleStatusService: vehicleStatusService,
-		// Add back req/resHeaders if needed by procedures, but often just db/services suffice
 	};
 }
 

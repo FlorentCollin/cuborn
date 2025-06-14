@@ -6,8 +6,7 @@ import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 
 export const Route = createRootRouteWithContext<{
 	queryClient: QueryClient;
-	trpc: ReturnType<typeof trpc.createClient>;
-	trpcUtils: AppRouterQueryUtils;
+	trpc: AppRouterQueryUtils;
 }>()({
 	component: RootComponent,
 });

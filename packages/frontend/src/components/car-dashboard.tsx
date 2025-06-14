@@ -6,7 +6,7 @@ import { Battery, Gauge, TrendingUp, Zap } from "lucide-react";
 import { BatteryChart } from "./battery-chart";
 import { VehicleStatus } from "./vehicle-status";
 
-export default function CarDashboard() {
+export function CarDashboard() {
 	const { data, isLoading } = trpc.vehicleStatus.last.useQuery();
 	const { data: stats } = trpc.vehicleStatus.statsThisMonth.useQuery();
 
