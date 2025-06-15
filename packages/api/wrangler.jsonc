@@ -1,68 +1,68 @@
 {
-  "$schema": "../../node_modules/wrangler/config-schema.json",
-  "name": "cuborn",
-  "main": "./src/index.ts",
-  "compatibility_date": "2025-05-25",
-  "workers_dev": true,
-  "observability": {
-    "enabled": true,
-  },
-  "d1_databases": [
-    {
-      "binding": "CUBORN_DB",
-      "database_name": "cuborn",
-      "database_id": "f283d39d-22f5-43d1-8a68-7d8d540f378b",
-      "migrations_dir": "./drizzle",
-    },
-  ],
-  "vars": {
-    "ENVIRONMENT": "prod",
-    "BASE_URL": "https://cuborn.florentcollinpro.workers.dev",
-  },
-  "durable_objects": {
-    "bindings": [
-      {
-        "name": "CRON_INSERT_TEST_DB",
-        "class_name": "CronInsertTestDb",
-      },
-    ],
-  },
-  "assets": { "directory": "../frontend/dist", "binding": "ASSETS" },
-  "env": {
-    "test": {
-      "d1_databases": [
-        {
-          "binding": "CUBORN_DB",
-          "database_name": "cuborn",
-          "database_id": "88aafbb3-5d5e-438e-b506-bd26e7f8d549",
-          "migrations_dir": "./drizzle",
-        },
-      ],
-      "durable_objects": {
-        "bindings": [
-          {
-            "name": "CRON_INSERT_TEST_DB",
-            "class_name": "CronInsertTestDb",
-          },
-        ],
-      },
-      "vars": {
-        "ENVIRONMENT": "test",
-        "BASE_URL": "https://cuborn-test.florentcollinpro.workers.dev",
-      },
-    },
-    "just-to-defined-vars": {
-      "vars": {
-        "BASE_URL": "https://dummy",
-        "GITHUB_CLIENT_ID": "<set_by_dev_vars>",
-        "GITHUB_CLIENT_SECRET": "<set_by_dev_vars>",
-      },
-    },
-  },
-  "migrations": [
-    {
-      "tag": "cron_insert_test_db",
-      "new_sqlite_classes": ["CronInsertTestDb"],
-    },
-  ],
+	"$schema": "../../node_modules/wrangler/config-schema.json",
+	"name": "cuborn",
+	"main": "./src/index.ts",
+	"compatibility_date": "2025-05-25",
+	"workers_dev": true,
+	"observability": {
+		"enabled": true
+	},
+	"d1_databases": [
+		{
+			"binding": "CUBORN_DB",
+			"database_name": "cuborn",
+			"database_id": "f283d39d-22f5-43d1-8a68-7d8d540f378b",
+			"migrations_dir": "./drizzle"
+		}
+	],
+	"vars": {
+		"ENVIRONMENT": "prod",
+		"BASE_URL": "https://cuborn.florentcollinpro.workers.dev"
+	},
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "CRON_INSERT_TEST_DB",
+				"class_name": "CronInsertTestDb"
+			}
+		]
+	},
+	"assets": { "directory": "../frontend/dist", "binding": "ASSETS" },
+	"env": {
+		"test": {
+			"d1_databases": [
+				{
+					"binding": "CUBORN_DB",
+					"database_name": "cuborn",
+					"database_id": "88aafbb3-5d5e-438e-b506-bd26e7f8d549",
+					"migrations_dir": "./drizzle"
+				}
+			],
+			"durable_objects": {
+				"bindings": [
+					{
+						"name": "CRON_INSERT_TEST_DB",
+						"class_name": "CronInsertTestDb"
+					}
+				]
+			},
+			"vars": {
+				"ENVIRONMENT": "test",
+				"BASE_URL": "https://cuborn-test.florentcollinpro.workers.dev"
+			}
+		},
+		"just-to-defined-vars": {
+			"vars": {
+				"BASE_URL": "https://dummy",
+				"GITHUB_CLIENT_ID": "<set_by_dev_vars>",
+				"GITHUB_CLIENT_SECRET": "<set_by_dev_vars>"
+			}
+		}
+	},
+	"migrations": [
+		{
+			"tag": "cron_insert_test_db",
+			"new_sqlite_classes": ["CronInsertTestDb"]
+		}
+	]
 }
