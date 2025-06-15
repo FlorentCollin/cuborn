@@ -1,4 +1,4 @@
-import { count, desc, gte, sql } from "drizzle-orm";
+import { count, desc, gte, min, sql } from "drizzle-orm";
 import type { Database } from "../db";
 import { vehicleStatusTable } from "../tables/vehicle-status.table";
 import type {
@@ -28,13 +28,13 @@ export class VehicleStatusService {
 		const rawData = this.db.$with("raw_data").as(
 			this.db
 				.select({
-					created_at: vehicleStatusTable.createdAt,
-					battery_level: vehicleStatusTable.batteryLevel,
-					prev_level:
+					createdAt: vehicleStatusTable.createdAt,
+					batteryLevel: vehicleStatusTable.batteryLevel,
+					prevLevel:
 						sql<number>`LAG(${vehicleStatusTable.batteryLevel}) OVER (ORDER BY ${vehicleStatusTable.createdAt})`.as(
 							"prev_level",
 						),
-					next_level:
+					nextLevel:
 						sql<number>`LEAD(${vehicleStatusTable.batteryLevel}) OVER (ORDER BY ${vehicleStatusTable.createdAt})`.as(
 							"next_level",
 						),
@@ -48,19 +48,19 @@ export class VehicleStatusService {
 		const significantChanges = this.db.$with("significant_changes").as(
 			this.db
 				.select({
-					created_at: rawData.created_at,
-					battery_level: rawData.battery_level,
+					createdAt: rawData.createdAt,
+					batteryLevel: rawData.batteryLevel,
 				})
 				.from(rawData)
 				.where(sql`
-          ABS(COALESCE(battery_level - prev_level, 0)) > 5 OR
-          ABS(COALESCE(battery_level - next_level, 0)) > 5
+          ABS(COALESCE(${rawData.batteryLevel} - ${rawData.prevLevel}, 0)) > 5 OR
+          ABS(COALESCE(${rawData.batteryLevel} - ${rawData.nextLevel}, 0)) > 5
         `)
 				.union(
 					this.db
 						.select({
-							created_at: rawData.created_at,
-							battery_level: rawData.battery_level,
+							createdAt: rawData.createdAt,
+							batteryLevel: rawData.batteryLevel,
 						})
 						.from(rawData)
 						// Explicitly cast to INTEGER for comparison
@@ -68,23 +68,33 @@ export class VehicleStatusService {
 				),
 		);
 
-		const result = await this.db
+		const history = await this.db
 			.with(rawData, significantChanges)
 			.select({
-				time: sql<string>`datetime(strftime('%Y-%m-%d %H:%M:00', created_at))`.as(
-					"time",
-				),
-				min_battery_level_percentage:
-					sql<number>`MIN(${significantChanges.battery_level})`.as(
-						"min_battery_level_percentage",
-					),
+				time: significantChanges.createdAt,
+				minBatteryLevelPercentage: min(significantChanges.batteryLevel),
 			})
 			.from(significantChanges)
-			.groupBy(sql`time`)
-			.orderBy(sql`time`)
+			.groupBy(significantChanges.createdAt)
+			.orderBy(significantChanges.createdAt)
 			.all();
 
-		return result;
+		const [lastBatteryLevel] = await this.db
+			.select({
+				time: vehicleStatusTable.createdAt,
+				batteryLevelPercentage: vehicleStatusTable.batteryLevel,
+			})
+			.from(vehicleStatusTable)
+			.orderBy(desc(vehicleStatusTable.createdAt))
+			.limit(1);
+
+		if (!lastBatteryLevel) {
+			throw new Error("lastBatteryLevel can't be undefined");
+		}
+		return {
+			history,
+			lastBatteryLevel,
+		};
 	}
 
 	async getStatsThisMonth() {

@@ -23,6 +23,16 @@ export function BatteryChart() {
 	const { data } = trpc.vehicleStatus.batteryLevelHistory.useQuery({
 		timeRange: timeRange,
 	});
+	const rows = data?.history.map((row) => ({
+		time: row.time,
+		batteryLevelPercentage: row.minBatteryLevelPercentage!,
+	}));
+	if (data?.lastBatteryLevel) {
+		rows?.push({
+			time: data.lastBatteryLevel.time,
+			batteryLevelPercentage: data.lastBatteryLevel.batteryLevelPercentage,
+		});
+	}
 
 	return (
 		<Card>
@@ -59,13 +69,30 @@ export function BatteryChart() {
 			<CardContent className="pt-4">
 				<ChartContainer
 					config={{
-						batteryLevel: {
-							label: "Battery Level",
+						batteryLevelPercentage: {
+							label: "Battery Level%",
 						},
 					}}
 					className="aspect-auto h-[250px] w-full"
 				>
-					<AreaChart data={data}>
+					<AreaChart data={rows}>
+						<ChartTooltip
+							content={
+								<ChartTooltipContent
+									labelFormatter={(value) => {
+										return new Date(value).toLocaleString(undefined, {
+											day: "numeric",
+											month: "long",
+											year: "numeric",
+											hour: "numeric",
+											minute: "numeric",
+										});
+									}}
+								/>
+							}
+							cursor={false}
+							defaultIndex={1}
+						/>
 						<CartesianGrid vertical={false} />
 						<XAxis
 							dataKey="time"
@@ -78,11 +105,12 @@ export function BatteryChart() {
 								return date.toLocaleDateString("en-US", {
 									month: "short",
 									day: "numeric",
+									hour: "numeric",
 								});
 							}}
 						/>
 						<YAxis
-							dataKey="min_battery_level_percentage"
+							dataKey="batteryLevelPercentage"
 							tickLine={false}
 							axisLine={false}
 							tickFormatter={(value) => `${value}%`}
@@ -92,7 +120,7 @@ export function BatteryChart() {
 						<ChartTooltip content={<ChartTooltipContent />} />
 						<Area
 							type="monotone"
-							dataKey="min_battery_level_percentage"
+							dataKey="batteryLevelPercentage"
 							dot={false}
 							strokeWidth={2}
 							connectNulls={true}
