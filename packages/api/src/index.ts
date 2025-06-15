@@ -20,10 +20,14 @@ app.use("*", async (_c, next) => {
 	if (initialized) return next();
 
 	// initialize the crons
-	const id = env.CRON_INSERT_TEST_DB.idFromName("CronTestInsertDb");
-	const cron = env.CRON_INSERT_TEST_DB.get(id);
-	const lastTimestamp = await cron.fetch("https://dummy").then((r) => r.text());
-	console.log(`LastTimestamp: ${lastTimestamp}`);
+	if (env.ENVIRONMENT === "test") {
+		const id = env.CRON_INSERT_TEST_DB.idFromName("CronTestInsertDb");
+		const cron = env.CRON_INSERT_TEST_DB.get(id);
+		const lastTimestamp = await cron
+			.fetch("https://dummy")
+			.then((r) => r.text());
+		console.log(`LastTimestamp: ${lastTimestamp}`);
+	}
 	initialized = true;
 
 	return next();
@@ -57,6 +61,9 @@ app
 		}),
 	)
 	.use("/trpc/*", async function ensureUserIsLoggedIn(c, next) {
+		if (env.ENVIRONMENT === "test") {
+			return next();
+		}
 		const user = c.get("user");
 		// note(florent): restrict the access to my own id for now
 		// if we want multiple users to access the app we must change this

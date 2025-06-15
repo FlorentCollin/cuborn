@@ -5,6 +5,7 @@ import { db } from "../core/db";
 import { vehicleStatusTable } from "../core/tables/vehicle-status.table";
 
 const SECONDS = 1000;
+const MINUTES = 60 * SECONDS;
 
 export class CronInsertTestDb extends DurableObject {
 	private readonly storage: DurableObjectStorage;
@@ -31,6 +32,7 @@ export class CronInsertTestDb extends DurableObject {
 			return lastTimestampDefault;
 		},
 		set: async (lastTimestamp: string) => {
+			console.log(`New last timestamp: ${lastTimestamp}`);
 			this.storage.put(this.lastTimestampKey, lastTimestamp);
 		},
 	};
@@ -41,7 +43,7 @@ export class CronInsertTestDb extends DurableObject {
 	}
 
 	override async alarm() {
-		this.storage.setAlarm(Date.now() + 10 * 60 * SECONDS);
+		this.storage.setAlarm(Date.now() + 10 * MINUTES);
 		const lastTimestamp = await this.lastTimestamp.get();
 
 		const [row] = await db
