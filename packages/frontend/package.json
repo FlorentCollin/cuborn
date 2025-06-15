@@ -4,11 +4,11 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"typecheck": "tsc --noEmit",
 		"dev": "vite",
 		"build": "vite build",
 		"serve": "vite preview",
-		"start": "vite"
+		"start": "vite",
+		"tsc": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.10.0",
@@ -78,6 +78,7 @@
 		"@vitejs/plugin-react": "^4.3.2",
 		"autoprefixer": "^10.4.20",
 		"postcss": "^8.5.1",
-		"vite": "^6.0.3"
+		"vite": "^6.0.3",
+		"@cuborn/api": "workspace:^"
 	}
 }

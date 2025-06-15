@@ -47,7 +47,6 @@ const rootElement = document.getElementById("app")!;
 if (!rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement);
 	root.render(
-		// @ts-expect-error
 		<trpc.Provider client={trpcClient} queryClient={queryClient}>
 			<QueryClientProvider client={queryClient}>
 				<RouterProvider router={router} />

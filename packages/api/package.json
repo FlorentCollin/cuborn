@@ -1,8 +1,13 @@
 {
 	"name": "@cuborn/api",
+	"exports": {
+		".": "./dist/src/index.d.ts"
+	},
 	"scripts": {
 		"dev": "wrangler dev",
-		"deploy": "wrangler deploy"
+		"deploy": "wrangler deploy",
+		"tsc": "tsc --noEmit --emitDeclarationOnly false",
+		"build": "tsc"
 	},
 	"dependencies": {
 		"@hono/trpc-server": "^0.3.4",

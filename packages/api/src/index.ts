@@ -107,3 +107,5 @@ app.on(["POST", "GET"], "/api/auth/**", (c) => {
 
 export default app;
 export { CronInsertTestDb } from "./cron/cron-insert-test-db";
+
+export type { AppRouter } from "./routers/app";
