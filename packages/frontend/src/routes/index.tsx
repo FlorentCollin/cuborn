@@ -20,8 +20,28 @@ export const Route = createFileRoute("/")({
 
 function HomeComponent() {
 	return (
-		<div className="p-2 lg:p-8">
-			<CarDashboard />
+		<div>
+			<EnvironmentBanner />
+			<div className="p-2 lg:p-8">
+				<CarDashboard />
+			</div>
 		</div>
 	);
+}
+
+type Environment = "prod" | "test";
+function EnvironmentBanner() {
+	let environment: Environment = "prod";
+	if (window.location.hostname.includes("cuborn-test")) {
+		environment = "test";
+	}
+	if (environment === "test") {
+		return (
+			<div className="sticky top-0 z-50 bg-yellow-300 text-black text-center text-xs py-1 font-semibold">
+				TEST enviroment with fake data
+			</div>
+		);
+	}
+
+	return <></>;
 }
