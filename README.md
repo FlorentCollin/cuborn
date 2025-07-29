@@ -54,8 +54,6 @@ The following files may be useful for exploring the codebase:
 > \[!note]
 > Currently, the Weconnect cron is implemented in Python but will soon be ported to a Cloudflare cron.
 
-### Learnings from This Project
-
 ### Other Useful Commands
 
 All useful commands for this project:
